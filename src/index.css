@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1em;
+  min-height: 100vh;
+}
+
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 100%;
+  background: #000;
+  cursor: pointer;
+  margin-top: 0px;
+  transition: border ease-out;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  border: 2px solid rgb(205, 176, 176, 0.9);
+}
+
+input[type=range]::-moz-range-thumb:hover {
+  border: 2px solid rgb(205, 176, 176, 0.9);
+}
+
+input[type=range]::-ms-thumb:hover {
+  border: 2px solid rgb(205, 176, 176, 0.9);
+}
+
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 100%;
+  background: #000;
+  cursor: pointer;
+  transition: border ease-out;
+}
+
+/* All the same stuff for IE */
+input[type=range]::-ms-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 100%;
+  background: #000;
+  cursor: pointer;
+  transition: border ease-out;
+}
+
+.left {
+  transform: perspective(600px) rotateY(35deg);
+  transition: 1s ease-in-out;
+}
+
+.left:hover {
+  transform: rotateY(0deg);
+}
+
+.right {
+  transform: perspective(600px) scale(95%) rotateY(-25deg);
+  transition: 1s ease-in-out;
+}
+
+.right:hover {
+  transform: rotateY(0deg);
+}
+
+@media only screen and (max-width: 1024px) {
+  .left {
+    transform: none;
+  }
+  
+  .right {
+    transform: none;
+  }
+}
+
+table {
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+table thead {
+  position: sticky;
+  inset-block-start: 0px;
+  z-index: 10;
+}
+
+th,
+td {
+  padding: 5px;
+  font-size: smaller;
+}
+
+td { 
+  overflow-wrap: break-word;
+}
+
+th {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+thead th:nth-of-type(1)
+thead th:nth-of-type(5),
+thead th:nth-of-type(6),
+thead th:nth-of-type(8) {
+  width: 5%;
+}
+
+thead th:nth-of-type(2) {
+  width: 20%;
+}
+
+tbody tr:nth-of-type(2n) {
+  background-color: rgb(245, 245, 245, 0.8);
+}
+
+tbody tr:nth-of-type(2n + 1) {
+  background-color: whitesmoke;
+}
+
+@media screen and (max-width: 768px) {
+  td, th {
+    font-size: 0.5em;
+  }
+}
