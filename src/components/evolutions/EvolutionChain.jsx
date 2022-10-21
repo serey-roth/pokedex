@@ -19,6 +19,8 @@ const EvolutionChain = () => {
 
     useEffect(() => {
         if (species) {
+            //get the evolution id that is used for all pokemons in the chain
+            //different from the id of the pokemon
             const eid = species.evolution_chain?.url?.match(/\/(\d+)\//g)[0]
             .replace(/\//g, '');
             setId(eid);
@@ -52,6 +54,8 @@ const EvolutionChain = () => {
     )
 }
 
+//render the ui for the evolution chain
+//note that one pokemon might have multiple 2nd evolutions, such as eevee
 const renderEvolutionUI = (chain) => {
     let result = [];
     let index = 0;
@@ -67,6 +71,8 @@ const renderEvolutionUI = (chain) => {
                 const child = chain[index + i];
                 children.push(<Evolution key={child.name} name={child.name}
                 details={child.details} />)
+                //separate the chain into groups with each group 
+                //containing the parent and two children
                 if (i % 2 === 0) {
                     const group = <div className='flex lg:flex-row flex-col gap-1 
                     items-center justify-center'>
@@ -79,6 +85,7 @@ const renderEvolutionUI = (chain) => {
                     children = [];
                 }
             }
+            //if there is a leftover, make a group with one parent and one child
             result.push(children.length === 1 ? children[0] : 
                 <div className='flex lg:flex-col flex-row gap-2 
                 items-center justify-center'>{children}</div>)
@@ -91,6 +98,12 @@ const renderEvolutionUI = (chain) => {
     return result;
 }
 
+//get the evolution chain of a pokemon
+//the evolution chain behaves like a multi-child tree so we use a queues to retrieve
+//all the pokemons in the chain
+//start by checking the chain object for the first pokemon in the chain
+//if the evolves_to property is a non-empty array, then there is a next evolution
+//repeat the process for the next evolution
 const getEvolutionChain = (data) => {
     let chain = data.chain;
     const evolutions = [];
@@ -99,6 +112,7 @@ const getEvolutionChain = (data) => {
     while (queue.length > 0) {
         const evolution = queue.shift();
         let children = 0;
+        //if there is a next evolution, add to the queue
         if (evolution.evolves_to.length > 0) {
             for (let item of evolution.evolves_to) {
                 children += 1;
@@ -106,6 +120,7 @@ const getEvolutionChain = (data) => {
             }
         }
         let details = {};
+        //if there is an evolution, get the details for that evolution
         if (evolution.evolution_details.length > 0) {
             Object.entries(evolution.evolution_details[0]).map(([key, value]) => {
                 if (value) {

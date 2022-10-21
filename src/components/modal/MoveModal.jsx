@@ -28,9 +28,12 @@ const MoveModal = () => {
         dispatch(setMoveModal(false));
     }
 
+    //when the user hits the escape key, we want to close the modal
     useEffect(() => {
         const closeOnEscapeKey = e => e.key === 'Escape' ? handleClose() : null;
         document.body.addEventListener('keydown', closeOnEscapeKey);
+        //remove the event listener when the element is unmounted 
+        //to prevent memory leak
         return () => {
             document.body.removeEventListener('keydown', closeOnEscapeKey);
         }

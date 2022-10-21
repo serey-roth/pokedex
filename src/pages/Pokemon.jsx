@@ -54,6 +54,7 @@ const Pokemon = () => {
             dispatch(setAbilityModal(false));
             dispatch(setMoveModal(false));
         }
+        //when the user clicks on the pokemon page, closes all the modals
         if (pokemonRef.current) {
             pokemonRef.current.addEventListener('click', handleClick);
         }
@@ -173,6 +174,7 @@ const getVersions = (version) => {
     }
 }
 
+//get the text entry for the pokemon
 const getPokedexEntries = (versionArray, species) => {
     const set = new Set();
     versionArray.map(version => set.add(species?.flavor_text_entries?.find(entry => 

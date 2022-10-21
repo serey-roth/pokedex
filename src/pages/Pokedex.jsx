@@ -12,11 +12,16 @@ import { updatePokedex } from '../redux/features/pokedexSlice';
 const Pokedex = ({ pageNum, setPageNum }) => {
     const dispatch = useDispatch();
 
+    //the pokemons that have been displayed so far based on the scroll position
     const [namesSoFar, updateNamesSoFar] = useState([]);
+    //the search input
     const [search, updateSearch] = useState('');
+    //the results from the search
     const [searchResults, updateSearchResults] = useState(null);
+    //the list of all pokemon names
     const pokedex = useSelector(state => state.pokedex);
 
+    //get the names of all pokemons
     const { data, isFetching, error } = useGetPokemonsQuery(pokedex.length > 0 ? -1 : 1000); 
 
     useEffect(() => {
@@ -27,7 +32,11 @@ const Pokedex = ({ pageNum, setPageNum }) => {
     }, [data]);
 
     useEffect(() => {
+        //the numbers displayed depends on the page number which depends
+        //on how far the user has scrolled down the page
         const count = 8 + 4 * pageNum;
+        //if there is a search, then show the search results based on the 
+        //given count; otherwise, show the pokedex based on the count
         if (searchResults) updateNamesSoFar(searchResults.slice(0, count));
         else updateNamesSoFar(pokedex.slice(0, count));
     }, [pageNum, searchResults, pokedex]);
@@ -41,6 +50,7 @@ const Pokedex = ({ pageNum, setPageNum }) => {
             updateSearchResults(null);
         }
         setPageNum(0);
+        //scroll to top of the pokedex for every new search or no search
         window.scrollTo(0, 0);
     }, [search]);
 

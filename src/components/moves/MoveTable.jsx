@@ -6,10 +6,13 @@ import { types } from '../../assets'
 import { useSelector } from 'react-redux';
 import { ImSpinner } from 'react-icons/im';
 
-
+//get all the moves based on the learned method and the chosen 
+//version of the game
 const getMove = (move, versions, learnedMethod, version) => {
     const idx = versions.findIndex(vObj => 
         vObj.version_group.name === version);
+    //if there are moves that exist in the given version,
+    //check for the moves with the given learned method
     if (idx !== -1 && 
     versions[idx].move_learn_method.name === learnedMethod) {
         return {
@@ -20,6 +23,7 @@ const getMove = (move, versions, learnedMethod, version) => {
     return null;
 }
 
+//sort the moves based on the learned method 
 const sortMoves = (learnedMethod, moves) => {
     switch(learnedMethod) {
         case 'level-up': {

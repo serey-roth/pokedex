@@ -17,6 +17,7 @@ const MovePool = () => {
     const [method, setMethod] = useState('level up');
     const data = useSelector(state => state.pokemon.base?.moves);
 
+    //check if the pokemon exists in the generation of the game that the user selects
     const existing = generation <= selectGeneration;
 
     return (

@@ -1,5 +1,6 @@
 import React from 'react'
 
+//for react suspense
 class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);

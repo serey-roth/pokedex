@@ -8,13 +8,19 @@ import MoveModal from './components/modal/MoveModal';
 import AbilityModal from './components/modal/AbilityModal';
 
 const App = () => {
+    //the page number determines how many pokemons are displayed to the user 
+    //on the screen
     const [pageNum, setPageNum] = useState(1);
+    //the element that the intersection observer listens for 
     const lastElement = useRef(null);
     const { moveModal, abilityModal } = useSelector(state => state.pokemon);
 
+    // a callback function that gets triggered when lastElement
+    //interesects the viewport, i.e., shows up on the screen 
     const handleObserver = useCallback((entries) => {
         const target = entries[0];
         if (target.isIntersecting) {
+            //if the target intersects the viewport, increment the page number
             setPageNum((prev) => {
                 return prev + 1;
             });
@@ -31,6 +37,7 @@ const App = () => {
         if (lastElement.current) observer.observe(lastElement.current);
     }, [handleObserver]);
     
+    //if a modal opens, hide the overflow the underlying page
     useEffect(() => {
         if (moveModal || abilityModal) document.body.style.overflow = 'hidden';
         else document.body.style.overflow = 'unset';
@@ -52,6 +59,12 @@ const App = () => {
     )
 }
 
+//we don't want the last element to be inside the pokedex component because
+//when the component is mounted, we're still loading data so the last element 
+//has not been mounted yet so lastElement will be null
+//when data is loaded, only the pokedex component renders, not app
+//you want it to be outside; then, when the app is mounted, the intersection
+//observer knows what to observe 
 const PokedexLayout = React.forwardRef((props, ref) => {
     return (
         <>
