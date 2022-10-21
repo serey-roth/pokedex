@@ -9,8 +9,9 @@ const Relation = ({mainType, effect, relation}) => (
     <div className='flex flex-col gap-1'>
         <p className='w-full font-semibold text-md
         text-center'>{effect}</p>
-        <div className='flex h-[50px] gap-1 w-full items-center
-        justify-center'>
+        <div className='flex flex-wrap h-[50px]
+        overflow-auto gap-1 w-full items-center
+        justify-center py-1'>
             {relation.length > 0 ? relation.map(type => (
                 <PokemonType key={`${mainType}-${effect}-${type.name}`}
                 type={type.name} size='w-[40px] h-[40px]'/>
@@ -26,25 +27,25 @@ const DamageRelations = ({ type }) => {
         <>
         {data?.damage_relations && (
             <div className='flex flex-col border border-slate-400/50
-            rounded-lg px-3 py-2'>
+            rounded-lg px-3 py-2 lg:max-w-[300px] max-w-full'>
                 <p className={`font-bold text-md capitalize
                 w-full text-center ${type && types[type].backgroundColor}
                 text-white rounded-lg p-2 backdrop-blur-sm`}>{type}</p>
 
                 <Relation 
-                mainType={type} 
-                effect='0x'
-                relation={data?.damage_relations?.no_damage_from} />
+                    mainType={type} 
+                    effect='0x'
+                    relation={data?.damage_relations?.no_damage_from} />
 
                 <Relation 
-                mainType={type} 
-                effect='0.5x'
-                relation={data?.damage_relations?.half_damage_from} />
+                    mainType={type} 
+                    effect='0.5x'
+                    relation={data?.damage_relations?.half_damage_from} />
 
                 <Relation 
-                mainType={type} 
-                effect='2x' 
-                relation={data?.damage_relations?.double_damage_from} />
+                    mainType={type} 
+                    effect='2x' 
+                    relation={data?.damage_relations?.double_damage_from} />
             </div>
         )}
         </>
