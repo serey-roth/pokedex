@@ -57,7 +57,7 @@ const MoveTable = ({learnedMethod, moveData, existing}) => {
     return (
         <>
             <div className={`w-full h-[300px] border-2 border-slate-300/50
-            ${type && types[type].backgroundColor}
+            ${type && types[type].backgroundColor} relative
             overflow-auto flex flex-col items-center`}>
                 {existing ? (
                 <>
@@ -94,7 +94,8 @@ const MoveTable = ({learnedMethod, moveData, existing}) => {
                 </p>)}
                 </>
                 ) : (
-                <p className='font-semibold text-white'>
+                <p className='font-semibold absolute top-1/2 -translate-y-1/2
+                text-white'>
                     This pokemon does not exist in this version.
                 </p>
                 )}
