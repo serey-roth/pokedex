@@ -50,6 +50,10 @@ const Pokemon = () => {
     const pokemonRef = createRef();
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []); 
+
+    useEffect(() => {
         const handleClick = () => {
             dispatch(setAbilityModal(false));
             dispatch(setMoveModal(false));
