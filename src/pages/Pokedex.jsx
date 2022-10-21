@@ -59,7 +59,7 @@ const Pokedex = ({ pageNum, setPageNum }) => {
     if (error) return (<Error />);
 
     return (
-        <div className='w-full flex flex-col min-h-[100vh] items-start relative'>
+        <div className='w-full flex flex-col items-start relative'>
             <div className='w-full flex flex-wrap fixed z-10
             items-center justify-center gap-3 bg-black text-yellow-400 p-3'>
                 <h1 className='animate-slideleft
