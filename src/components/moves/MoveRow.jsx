@@ -12,7 +12,6 @@ import { ImSpinner } from 'react-icons/im';
 const MoveRow = ({ level, name, setIsFetching}) => {
     const dispatch = useDispatch();
     const type = useSelector(state => state.pokemon.type);
-    const visible = useSelector(state => state.pokemon.moveModal);
     const { data, isFetching, error } = useGetPokemonMoveQuery(name);
 
     const handleClick = () => {

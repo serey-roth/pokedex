@@ -35,8 +35,7 @@ const Stats = () => {
     const [proportions, setProportions] = useState(null);
     const [level, setLevel] = useState(1);
     
-    const type = useSelector(state => state.pokemon.type);
-    const data = useSelector(state => state.pokemon.base);
+    const { type, base: data } = useSelector(state => state.pokemon);
 
     useEffect(() => {
         let statsData;

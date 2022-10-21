@@ -15,8 +15,7 @@ const getImgUrl = (icon) => {
 
 const BaseInfo = () => {
     const dispatch = useDispatch();
-    const type = useSelector(state => state.pokemon.type);
-    const base = useSelector(state => state.pokemon.base);
+    const { type, base } = useSelector(state => state.pokemon);
     
     const handleClick = (name) => {
         dispatch(setAbilityModal(true));

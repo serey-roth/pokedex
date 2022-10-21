@@ -65,7 +65,6 @@ const Pokemon = () => {
         }
     }, [dispatch]);
 
-
     useEffect(() => {
         if (base) {
             const type = base.types[0].type.name;

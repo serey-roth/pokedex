@@ -41,15 +41,17 @@ const EvolutionChain = () => {
             rounded-lg p-2`}>
                 Evolution Chain
             </h1> 
-            {chain?.length === 1 && (
+            {chain?.length === 1 ? (
                 <p className='w-full text-center
                 font-semibold text-lg'>This pokemon does not evolve.</p>
+            ) : (
+                <div className='flex flex-1 lg:flex-row lg:flex-wrap
+                flex-col w-full gap-5 justify-center items-center
+                lg:h-[200px]'>
+                    {renderEvolutionUI(chain)}
+                </div>
             )}
-            <div className='flex flex-1 lg:flex-row lg:flex-wrap
-            flex-col w-full gap-5 justify-center items-center
-            lg:h-[200px]'>
-            {chain && renderEvolutionUI(chain)}
-            </div>
+           
         </div>
     )
 }
@@ -59,13 +61,15 @@ const EvolutionChain = () => {
 const renderEvolutionUI = (chain) => {
     let result = [];
     let index = 0;
+    if (!chain) return null;
     while (index < chain.length) {
         let item = chain[index];
         if (item.children <= 1) {
             result.push(<Evolution key={item.name} name={item.name}
                 details={item.details} />)
+            index++;
         }
-        if (item.children > 1) {
+        else {
             let children = [];
             for (let i = 1; i <= item.children; i++) {
                 const child = chain[index + i];
@@ -86,14 +90,15 @@ const renderEvolutionUI = (chain) => {
                 }
             }
             //if there is a leftover, make a group with one parent and one child
-            result.push(children.length === 1 ? children[0] : 
+            result.push(children.length === 1 && (
                 <div className='flex lg:flex-col flex-row gap-2 
-                items-center justify-center'>{children}</div>)
+                items-center justify-center'>
+                <Evolution key={item.name} name={item.name}
+                details={item.details} />
+                {children[0]}
+                </div>))
             index = item.children + 1;
-        } else {
-            index++;
-        }
-        
+        }         
     }
     return result;
 }

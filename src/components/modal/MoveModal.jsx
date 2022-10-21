@@ -11,10 +11,12 @@ import ModalPortal from './ModalPortal';
 
 const MoveModal = () => {
     const dispatch = useDispatch();
-    const type = useSelector(state => state.pokemon.type);
-    const move = useSelector(state => state.pokemon.selectMove);
-    const version = useSelector(state => state.pokemon.version);
-    const visible = useSelector(state => state.pokemon.moveModal);
+    const {
+        type, 
+        version, 
+        selectMove: move, 
+        moveModal: visible
+    } = useSelector(state => state.pokemon);
     const { data, isFetching, error } = useGetPokemonMoveQuery(move);
 
     const effectObj = data?.effect_entries?.find(entry => 
@@ -43,8 +45,8 @@ const MoveModal = () => {
 
     return (
         <ModalPortal wrapperId='modal-portal'>
-            <div className='fixed inset-x-1/4 inset-y-[10%] z-50 
-            overflow-auto  transition-all ease-in-out flex 
+            <div className='fixed lg:inset-x-1/4 lg:inset-y-[10%] z-50 
+            inset-[2%] overflow-auto  transition-all ease-in-out flex 
             backdrop-blur-sm mix-blend-luminosity animate-slideup
             border border-slate-500/40 rounded-lg bg-white
             flex-col items-center gap-3 p-5'>

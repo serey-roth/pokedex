@@ -59,7 +59,7 @@ const Pokedex = ({ pageNum, setPageNum }) => {
     if (error) return (<Error />);
 
     return (
-        <div className='w-full flex flex-col min-h-[110vh] items-start relative'>
+        <div className='w-full flex flex-col min-h-[100vh] items-start relative'>
             <div className='w-full flex flex-wrap fixed z-10
             items-center justify-center gap-3 bg-black text-yellow-400 p-3'>
                 <h1 className='animate-slideleft
@@ -68,7 +68,7 @@ const Pokedex = ({ pageNum, setPageNum }) => {
                 </h1>    
                 <SearchBar search={search} updateSearch={updateSearch} />
             </div>
-            <div className='flex-1 flex flex-col sm:grid mt-[4.5em]
+            <div className='flex flex-col sm:grid mt-[4.5em]
             sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full'>
                 {namesSoFar.map(name => 
                 (<PokemonCard key={`pokemon-${name}`} query={name} />))}

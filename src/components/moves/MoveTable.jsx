@@ -39,9 +39,8 @@ const sortMoves = (learnedMethod, moves) => {
     }
 }
 
-const MoveTable = ({learnedMethod, moveData}) => {
-    const {type, version, generation, selectGeneration } = useSelector(state => state.pokemon);
-    const existing = generation <= selectGeneration;
+const MoveTable = ({learnedMethod, moveData, existing}) => {
+    const { type, version } = useSelector(state => state.pokemon);
 
     let moves;
 

@@ -3,7 +3,6 @@ import React from 'react'
 import { BsArrowDown, BsArrowRight } from 'react-icons/bs'
 
 const EvolutionArrow = ({ details }) => {
-    console.log(details)
     return (
     <div className='flex flex-col items-center
     w-[150px] h-[120px] lg:w-50px break-words'>

@@ -10,6 +10,7 @@ import ImagePlaceHolder from './ImagePlaceHolder';
 
 import { useGetPokemonQuery } from '../redux/services/pokemonApi'
 
+//for lazy loading image
 const PokemonImage = React.lazy(() => import('./PokemonImage'))
 
 const PokemonCard = ({ query }) => {
@@ -32,7 +33,7 @@ const PokemonCard = ({ query }) => {
 
     return (
         <div className={`flex flex-col justify-center 
-        h-[400px] sm:h-auto p-4 border-2 relative gap-2 backdrop-blur-sm`}>
+        h-fit p-4 border-2 relative gap-2 backdrop-blur-sm`}>
             <h3 className={`font-[900] text-[2em] italic 
             ${data && types[data.types[0].type.name].textColor}
             absolute top-1`}>
@@ -41,12 +42,12 @@ const PokemonCard = ({ query }) => {
             <React.Suspense 
             fallback={
                 <div className='sm:w-[200px] flex flex-col self-center 
-                h-[400px] sm:h-[200px]'>
+                h-[300px] sm:h-[200px]'>
                     <ImagePlaceHolder />
                 </div>
             }>
                 <div className='sm:w-[200px] flex flex-col self-center 
-                h-[400px] sm:h-[200px]'>
+                h-[300px] sm:h-[200px]'>
                     <PokemonImage 
                     src={data?.sprites?.other['official-artwork'].front_default} />
                 </div>

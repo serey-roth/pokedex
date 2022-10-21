@@ -44,7 +44,7 @@ const MovePool = () => {
                 ))}
             </div>
             <MoveTable type={type} learnedMethod={learnedMethods[method]}
-            moveData={data} />
+            moveData={data} existing={existing} />
         </div>
     )
 }

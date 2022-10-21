@@ -3,8 +3,7 @@ import { BsGenderFemale, BsGenderMale } from 'react-icons/bs'
 import { useSelector } from 'react-redux'
 
 const Breeding = () => {
-    const base = useSelector(state => state.pokemon.base);
-    const species = useSelector(state => state.pokemon.species);
+    const { base, species } = useSelector(state => state.pokemon);
 
     return (
         <div className='flex flex-col flex-wrap gap-2'>
