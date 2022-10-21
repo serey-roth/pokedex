@@ -35,7 +35,10 @@ const App = () => {
         };
         const observer = new IntersectionObserver(handleObserver, option);
         if (lastElement.current) observer.observe(lastElement.current);
-    }, [handleObserver]);
+        return () => { 
+            if (lastElement.current) observer.unobserve(lastElement.current);
+        }
+    }, [lastElement.current]);
     
     //if a modal opens, hide the overflow the underlying page
     useEffect(() => {
@@ -44,8 +47,7 @@ const App = () => {
     }, [moveModal, abilityModal])
 
     return (
-        <div className='flex flex-col bg-white w-screen min-h-screen 
-        justify-center relative'>
+        <div className='flex flex-col bg-white w-screen min-h-screen relative'>
             <Routes>
                 <Route element={<PokedexLayout ref={lastElement} />}>
                     <Route path='/'
