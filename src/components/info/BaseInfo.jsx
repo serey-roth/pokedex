@@ -2,10 +2,11 @@ import React from 'react'
 
 import { types } from '../../assets';
 import { useSelector, useDispatch } from 'react-redux';
-import { setAbilityModal, setSelectAbility } from '../../redux/features/pokemonSlice';
+import { setForm, setSelectAbility } from '../../redux/features/pokemonSlice';
+import { setAbilityModal } from '../../redux/features/uiSlice';
 
 const convertToFootInch = (heightMeter) => {
-    return `(${Math.floor(heightMeter * 3.281)}''${Math.floor((heightMeter * 3.281 % 1) * 12)}')`;
+    return `(${Math.floor(heightMeter * 0.3281)}''${Math.floor((heightMeter * 0.3281 % 1) * 12)}')`;
 }
 
 const getImgUrl = (icon) => {
@@ -15,7 +16,7 @@ const getImgUrl = (icon) => {
 
 const BaseInfo = () => {
     const dispatch = useDispatch();
-    const { type, base } = useSelector(state => state.pokemon);
+    const { type, base, species } = useSelector(state => state.pokemon);
     
     const handleClick = (name) => {
         dispatch(setAbilityModal(true));
@@ -36,7 +37,7 @@ const BaseInfo = () => {
                 <p className='text-center font-semibold text-black
                 w-[70px]'>Height</p>
                 <p className='flex-1'>
-                {base?.height && base.height * 100}m &nbsp;
+                {base?.height && base.height / 10}m &nbsp;
                 {base?.height && convertToFootInch(base.height)}
                 </p>
             </span>
@@ -87,12 +88,15 @@ const BaseInfo = () => {
                 <p className='text-center font-semibold text-black
                 w-[70px]'>Forms</p>
                 <span className='flex flex-wrap gap-2 flex-1'>
-                {base && base.forms?.map(form => (
-                    <p key={form.name} 
+                {species && species.varieties?.map(variety => (
+                    <p key={variety?.pokemon?.name} 
                     className={`capitalize font-semibold text-center
-                    rounded-md py-1 px-2 text-white 
-                    ${type && types[type].backgroundColor} `}>
-                        {form.name}
+                    rounded-md py-1 px-2 text-white cursor-pointer
+                    ${type && types[type].backgroundColor}`}
+                    onClick={() => dispatch(setForm(variety?.pokemon?.name))}>
+                        {variety?.pokemon?.name.replace(/([a-z]+)\-([a-z]+)/g, '$2 $1')
+                        .replace(/\-/g, ' ')
+                        .replace(/gmax/g, 'gigantamax')}
                     </p>
                 ))}
                 </span>
