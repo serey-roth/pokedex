@@ -4,7 +4,6 @@ import MoveRow from './MoveRow';
 
 import { types } from '../../assets'
 import { useSelector } from 'react-redux';
-import { ImSpinner } from 'react-icons/im';
 
 //get all the moves based on the learned method and the chosen 
 //version of the game
@@ -56,7 +55,7 @@ const MoveTable = ({learnedMethod, moveData, existing}) => {
 
     return (
         <>
-            <div className={`w-full h-[300px] border-2 border-slate-300/50
+            <div className={`w-full lg:w-[80%] h-[300px] border-2 border-slate-300/50
             ${type && types[type].backgroundColor} relative
             overflow-auto flex flex-col items-center`}>
                 {existing ? (
@@ -90,7 +89,7 @@ const MoveTable = ({learnedMethod, moveData, existing}) => {
                 </table>
                 {moves?.length === 0 && (<p className='flex items-center
                 justify-center flex-1 text-white'>
-                    This pokemon cannot learn this kind of moves.
+                    No moves learned by this method in the chosen game were found.
                 </p>)}
                 </>
                 ) : (
