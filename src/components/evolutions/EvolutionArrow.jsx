@@ -22,15 +22,20 @@ const EvolutionArrow = ({ details }) => {
                 Use {details.item.name.replace(/\-/g, ' ')}
             </p>
         )}
-        {details?.min_happiness && details?.time_of_day && (
+        {details?.min_happiness && (
             <>
             <p className='font-[400] capitalize text-md text-center'>
                 Happiness {details.min_happiness}+            
             </p>
-            <p className='font-[400] capitalize text-md text-center'>
+            {details?.time_of_day && (<p className='font-[400] capitalize text-md text-center'>
                 At {details.time_of_day}time
-            </p>
+            </p>)}
             </>
+        )}
+        {details?.min_beauty && (
+            <p className='font-[400] capitalize text-md text-center'>
+            Beauty {details.min_beauty}+            
+            </p>
         )}
         {details?.location && (
             <p className='font-[400] capitalize text-md text-center'>
@@ -52,9 +57,10 @@ const EvolutionArrow = ({ details }) => {
             </p>
             </>
         )}
-        {details?.trigger?.name === 'trade' && (
+        {(details?.trigger?.name === 'trade' || details?.trigger?.name === 'spin')
+        && (
             <p className='font-[400] capitalize text-md text-center'>
-                By Trading
+               By {details?.trigger?.name === 'trade' ? 'Trading' : 'Spinning'}
             </p>
         )}
     </div>
