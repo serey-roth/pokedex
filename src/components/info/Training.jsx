@@ -17,7 +17,7 @@ const Training = () => {
                 ))}
                 </span>
             </span>
-            <span className='flex gap-1 items-center'>
+            <span className='flex gap-2 items-center'>
                 <p className='text-center font-semibold text-black
                 w-[100px]'>Catch Rate</p>
                 <p className='flex-1'>
