@@ -3,7 +3,7 @@ import { BsGenderFemale, BsGenderMale } from 'react-icons/bs'
 import { useSelector } from 'react-redux'
 
 const Breeding = () => {
-    const { base, species } = useSelector(state => state.pokemon);
+    const species  = useSelector(state => state.pokemon.species);
 
     return (
         <div className='flex flex-col flex-wrap gap-2'>
@@ -23,12 +23,12 @@ const Breeding = () => {
                 )}
                 {species?.gender_rate && species?.gender_rate > -1 && (
                     <p className='flex items-center gap-1'>
-                        {species?.gender_rate / 8} <BsGenderFemale className='font-bold'/>
+                        {species?.gender_rate / 8 * 100}% <BsGenderFemale className='font-bold'/>
                     </p>
                 )}
                 {species?.gender_rate && species?.gender_rate > -1 && (
                     <p className='flex items-center gap-1'>
-                        {(8- species?.gender_rate) / 8} <BsGenderMale className='font-bold'/>
+                        {(8- species?.gender_rate) / 8 * 100}% <BsGenderMale className='font-bold'/>
                     </p>
                 )}
             </span>
@@ -44,7 +44,14 @@ const Breeding = () => {
                 <p className='text-center font-semibold text-black
                 w-[100px]'>Alternative Forms</p>
                 <p className='capitalize'>
-                {base?.forms?.length > 1 ? 'Yes': 'No'}
+                {species?.forms_switchable ? 'Yes': 'No'}
+                </p>
+            </span>
+            <span className='flex gap-2 items-center'>
+                <p className='text-center font-semibold text-black
+                w-[100px]'>Gender Differences</p>
+                <p className='capitalize'>
+                {species?.has_gender_differences ? 'Yes': 'No'}
                 </p>
             </span>
         </div>   
