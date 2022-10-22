@@ -8,7 +8,6 @@ import { setSelectMove } from '../../redux/features/pokemonSlice';
 import { setMoveModal } from '../../redux/features/uiSlice';
 
 import PokemonType from '../PokemonType';
-import { ImSpinner } from 'react-icons/im';
 
 const MoveRow = ({ level, name, setIsFetching}) => {
     const dispatch = useDispatch();
