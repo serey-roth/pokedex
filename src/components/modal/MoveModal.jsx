@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { types } from '../../assets';
 import { useGetPokemonMoveQuery } from '../../redux/services/pokemonApi';
-import { setMoveModal } from '../../redux/features/pokemonSlice';
+import { setMoveModal } from '../../redux/features/uiSlice';
 
 import MoveStats from './MoveStats';
 import Info from './Info';
@@ -15,8 +15,8 @@ const MoveModal = () => {
         type, 
         version, 
         selectMove: move, 
-        moveModal: visible
     } = useSelector(state => state.pokemon);
+    const visible = useSelector(state => state.ui.moveModal)
     const { data, isFetching, error } = useGetPokemonMoveQuery(move);
 
     const effectObj = data?.effect_entries?.find(entry => 

@@ -6,14 +6,16 @@ import { ImSpinner } from 'react-icons/im'
 import { useGetPokemon } from '../features/useGetPokemon'
 
 import { types } from '../assets'
+
 import { 
-    setAbilityModal, 
     setBase,
-    setMoveModal, 
     setSpecies, 
     setType,
-    setGeneration
+    setGeneration,
+    setForm
 } from '../redux/features/pokemonSlice'
+
+import { setAbilityModal, setMoveModal, updatePage } from '../redux/features/uiSlice'
 
 import ImagePlaceHolder from '../components/ImagePlaceHolder'
 import Info from '../components/info/Info'
@@ -43,15 +45,15 @@ const PokedexEntry = ({version, text, type}) => (
 const Pokemon = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { id } = useParams();
+    const { query } = useParams();
+    const { type, version, species: storedSpecies, form } = useSelector(state => state.pokemon);
     const { base, species, isFetchingBase, 
-        isFetchingSpecies, errorBase, errorSpecies } = useGetPokemon(id)
-    const { type, version } = useSelector(state => state.pokemon);
+        isFetchingSpecies, errorBase, errorSpecies } = useGetPokemon(form ? form : query)
     const pokemonRef = createRef();
 
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, []); 
+    }, [form]); 
 
     useEffect(() => {
         const handleClick = () => {
@@ -84,6 +86,12 @@ const Pokemon = () => {
         }
     }, [dispatch, species]);
 
+    const handleReturn = () => {
+        dispatch(updatePage('pokedex'));
+        dispatch(setForm(null));
+        navigate('/');
+    }
+
     if (isFetchingBase || isFetchingSpecies) return (<Loader />);
 
     if (errorBase) return (<Error />)
@@ -96,7 +104,7 @@ const Pokemon = () => {
                 p-3 ${type && types[type].backgroundColor}
                 text-black gap-3 justify-center`}>
                     <FiChevronLeft className='font-bold text-xl cursor-pointer' 
-                    onClick={() => navigate('/')}/>
+                    onClick={handleReturn}/>
                     <h1 className='font-bold uppercase text-2xl'>
                         Pokedex
                     </h1>
@@ -118,14 +126,16 @@ const Pokemon = () => {
                     </React.Suspense>
                     <h1 className={`font-bold text-2xl uppercase
                     ${type && types[type].textColor}`}>
-                        {base?.name}
+                        {base?.name?.replace(/([a-z]+)\-([a-z]+)/g, '$2 $1')
+                        .replace(/\-/g, ' ')
+                        .replace(/gmax/g, 'gigantamax')}
                     </h1>
                     <p className={`font-semibold text-lg cursor-pointer
                     ${type && types[type].backgroundColor}
                     text-white rounded-lg p-2`}
                     onClick={() => dispatch(setSelectGenera(
-                    species?.genera[7]?.genus))}>
-                        {species?.genera[7]?.genus}
+                    storedSpecies?.genera[7]?.genus))}>
+                        {storedSpecies?.genera[7]?.genus}
                     </p>
                 </div>
                 <div className='flex flex-col px-5 items-center gap-3 w-full'>
@@ -134,7 +144,7 @@ const Pokemon = () => {
                     rounded-lg p-2`}>
                         Pokedex Entries
                     </h1>
-                    {getPokedexEntries(getVersions(version), species).map(entry => (
+                    {getPokedexEntries(getVersions(version), storedSpecies).map(entry => (
                     <PokedexEntry 
                     key={entry.version} 
                     version={entry.version}

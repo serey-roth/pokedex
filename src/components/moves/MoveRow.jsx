@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGetPokemonMoveQuery } from '../../redux/services/pokemonApi'
 import { types } from '../../assets';
 
-import { setMoveModal, setSelectMove } from '../../redux/features/pokemonSlice';
+import { setSelectMove } from '../../redux/features/pokemonSlice';
+import { setMoveModal } from '../../redux/features/uiSlice';
 
 import PokemonType from '../PokemonType';
 import { ImSpinner } from 'react-icons/im';

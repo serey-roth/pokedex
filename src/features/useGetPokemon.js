@@ -3,25 +3,33 @@ import {
     useGetPokemonSpeciesQuery,
 } from '../redux/services/pokemonApi'
 
-export const useGetPokemon = (id) => {
+export const useGetPokemon = (query) => {
     const { 
         data: base, 
         isFetching: isFetchingBase, 
         error: errorBase
-    } = useGetPokemonQuery(id);
+    } = useGetPokemonQuery(query);
 
     const { 
         data: species, 
         isFetching: isFetchingSpecies, 
         error: errorSpecies
-    } = useGetPokemonSpeciesQuery(id);
+    } = useGetPokemonSpeciesQuery(/[a-z]+\-[a-z]+/g.test(query) ? null : query);
     
-    return {
+    const result = {
         base,
         isFetchingBase,
         errorBase,
-        species,
-        isFetchingSpecies,
-        errorSpecies
+    }
+
+    if (species && species.id) {
+        return {
+            ...result, 
+            species,
+            isFetchingSpecies,
+            errorSpecies
+        }
+    } else {
+        return result;
     }
 }

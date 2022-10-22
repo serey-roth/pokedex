@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { types } from '../../assets';
 import { useGetPokemonAbilityQuery } from '../../redux/services/pokemonApi';
-import { setAbilityModal } from '../../redux/features/pokemonSlice';
+import { setAbilityModal } from '../../redux/features/uiSlice';
 
 import Info from './Info';
 import ModalPortal from './ModalPortal';
@@ -13,9 +13,9 @@ const MoveModal = () => {
     const {
         type, 
         version, 
-        selectAbility: ability, 
-        abilityModal: visible
+        selectAbility: ability
     } = useSelector(state => state.pokemon);
+    const visible = useSelector(state => state.ui.abilityModal)
     const { data, isFetching, error } = useGetPokemonAbilityQuery(ability);
 
     const effectObj = data?.effect_entries?.find(entry => 

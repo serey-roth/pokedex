@@ -5,19 +5,18 @@ const pokemonSlice = createSlice({
     initialState: {
         id: null,
         type: null,
-        generation: -1,
+        form: null, 
+        generation: -1, //generation in which the pokemon is introduced
         version: 'red-blue',
         color: null,
         base: null,
         species: null,
         evolutions: null,
         typings: {},
-        selectGeneration: 1,
+        selectGeneration: 1, //the generation of the game that the user chooses
         selectMove: null,
         selectAbility: null,
         selectGenera: null,
-        moveModal: false,
-        abilityModal: false,
     },
     reducers: {
         setId(state, action) {
@@ -25,6 +24,18 @@ const pokemonSlice = createSlice({
         },
         setType(state, action) {
             state.type = action.payload;
+        },
+        setForm : {
+            reducer: (state, action) => {
+                state.form = action.payload;
+            },
+            prepare(form) {
+                let payload;
+                if (/[a-z]+\-[a-z]{2,}/g.test(form)) {
+                    payload = form;
+                }
+                return { payload };
+            }
         },
         setVersion(state, action) {
             state.version = action.payload;
@@ -47,12 +58,6 @@ const pokemonSlice = createSlice({
         setSelectAbility(state, action) {
             state.selectAbility = action.payload
         },
-        setMoveModal(state, action) {
-            state.moveModal = action.payload
-        },
-        setAbilityModal(state, action) {
-            state.abilityModal = action.payload
-        },
         setGeneration(state, action) {
             switch(action.payload) {
                 case 'i': { state.generation = 1; break; }
@@ -74,6 +79,7 @@ const pokemonSlice = createSlice({
 export const { 
     setId,
     setType,
+    setForm,
     setBase,
     setEvolutions,
     setVersion,
@@ -81,8 +87,6 @@ export const {
     setTypings,
     setSelectAbility,
     setSelectMove,
-    setMoveModal,
-    setAbilityModal,
     setGeneration,
     setSelectGeneration
 } = pokemonSlice.actions

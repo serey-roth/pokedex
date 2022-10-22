@@ -26,7 +26,9 @@ const Pokedex = ({ pageNum, setPageNum }) => {
 
     useEffect(() => {
         if (data?.results) {
-            const entries = data.results.map(result => result.name);
+            const entries = data.results.map(result => 
+                /[a-z]+\-[a-z]{2,}/g.test(result.name) ? null : result.name)
+                .filter(entry => entry !== null);
             dispatch(updatePokedex(entries));
         }
     }, [data]);

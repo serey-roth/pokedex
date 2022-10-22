@@ -1,19 +1,28 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, {  
+    useState, 
+    useEffect, 
+    useLayoutEffect,
+    useRef,
+    useCallback 
+} from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Pokedex from './pages/Pokedex';
 import Pokemon from './pages/Pokemon';
 import MoveModal from './components/modal/MoveModal';
 import AbilityModal from './components/modal/AbilityModal';
+import { updatePage } from './redux/features/uiSlice';
 
 const App = () => {
+    const dispatch = useDispatch();
+
     //the page number determines how many pokemons are displayed to the user 
     //on the screen
     const [pageNum, setPageNum] = useState(1);
     //the element that the intersection observer listens for 
     const lastElement = useRef(null);
-    const { moveModal, abilityModal } = useSelector(state => state.pokemon);
+    const { page, moveModal, abilityModal } = useSelector(state => state.ui);
 
     // a callback function that gets triggered when lastElement
     //interesects the viewport, i.e., shows up on the screen 
@@ -27,18 +36,25 @@ const App = () => {
         }
     }, []);
     
-    useEffect(() => {
+    useLayoutEffect(() => {
+        if (window.location.pathname === '/') {
+            dispatch(updatePage('pokedex'));
+        } else {
+            dispatch(updatePage('pokemon'));
+        }
+    }, [window.location.pathname])
+
+    useLayoutEffect(() => {
         const option = {
           root: null,
           rootMargin: "0px",
           threshold: 0
         };
         const observer = new IntersectionObserver(handleObserver, option);
-        if (lastElement.current) observer.observe(lastElement.current);
-        return () => { 
-            if (lastElement.current) observer.unobserve(lastElement.current);
+        if (lastElement.current) {
+            observer.observe(lastElement.current)
         }
-    }, [lastElement.current]);
+    }, [page]);
     
     //if a modal opens, hide the overflow the underlying page
     useEffect(() => {
@@ -53,7 +69,7 @@ const App = () => {
                     <Route path='/'
                     element={<Pokedex pageNum={pageNum} setPageNum={setPageNum}/>} />
                 </Route>
-                <Route path='/pokemon/:id' element={<Pokemon />} />
+                <Route path='/pokemon/:query' element={<Pokemon />} />
             </Routes>
             <MoveModal />
             <AbilityModal />

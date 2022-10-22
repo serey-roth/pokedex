@@ -8,15 +8,25 @@ import PokemonPlaceHolder from './PokemonPlaceHolder';
 import PokemonType from './PokemonType';
 import ImagePlaceHolder from './ImagePlaceHolder';
 
-import { useGetPokemonQuery } from '../redux/services/pokemonApi'
+import { pokemonApi, useGetPokemonQuery } from '../redux/services/pokemonApi'
+import { updatePage } from '../redux/features/uiSlice';
 
 //for lazy loading image
 const PokemonImage = React.lazy(() => import('./PokemonImage'))
 
 const PokemonCard = ({ query }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const { data, isFetching, error } = useGetPokemonQuery(query);
     
+    const handleClick = (pokemon) => {
+        if (pokemon) {
+            dispatch(updatePage('pokemon'));
+            navigate(`/pokemon/${pokemon}`);
+        }
+    }
+
     if (isFetching) 
     return (
         <PokemonPlaceHolder>
@@ -56,7 +66,7 @@ const PokemonCard = ({ query }) => {
                 <h1 className={`flex-1 capitalize font-bold text-2xl
                 cursor-pointer hover:text-black transition-colors
                 ${data && types[data.types[0].type.name].textColor}`}
-                onClick={() => navigate(`/pokemon/${data?.id}`)}>
+                onClick={() => handleClick(data?.name)}>
                     {data?.name}
                 </h1>
                 <div className='flex items-center gap-1'>
