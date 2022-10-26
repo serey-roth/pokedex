@@ -12,7 +12,8 @@ import {
     setSpecies, 
     setType,
     setGeneration,
-    setForm
+    setVariety,
+    setName
 } from '../redux/features/pokemonSlice'
 
 import { setAbilityModal, setMoveModal, updatePage } from '../redux/features/uiSlice'
@@ -46,14 +47,14 @@ const Pokemon = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { query } = useParams();
-    const { type, version, species: storedSpecies, form } = useSelector(state => state.pokemon);
+    const { type, version, species: storedSpecies, variety } = useSelector(state => state.pokemon);
     const { base, species, isFetchingBase, 
-        isFetchingSpecies, errorBase, errorSpecies } = useGetPokemon(form ? form : query)
+        isFetchingSpecies, errorBase, errorSpecies } = useGetPokemon(variety ? variety : query)
     const pokemonRef = createRef();
 
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [form]); 
+    }, [variety]); 
 
     useEffect(() => {
         const handleClick = () => {
@@ -67,7 +68,7 @@ const Pokemon = () => {
         return () => {
             if (pokemonRef.current) {
                 pokemonRef.current.removeEventListener('click');
-            }
+            }                                                                                                                                                     
         }
     }, [dispatch]);
 
@@ -81,15 +82,29 @@ const Pokemon = () => {
     
     useEffect(() => {
         if (species) {
+            dispatch(setName(species.name))
             dispatch(setSpecies(species));
             dispatch(setGeneration(species?.generation?.name?.replace(/generation\-/g, '')));
+            
         }
     }, [dispatch, species]);
 
     const handleReturn = () => {
         dispatch(updatePage('pokedex'));
-        dispatch(setForm(null));
+        dispatch(setVariety(null));
         navigate('/');
+    }
+
+    const name = base?.name?.replace(
+        new RegExp(`${storedSpecies?.name}\-(\[a\-z\-\]+)`,
+        'g'), `${storedSpecies?.name} [ $1 ]`)
+        .replace(/\-/g, ' ')
+        .replace(/gmax/g, 'gigantamax');
+
+    let image = base?.sprites?.other['official-artwork'].front_default;
+    if (/starter/g.test(name)) {
+        image = new URL(`../assets/artworks/${variety}.png`, 
+        import.meta.url).href;
     }
 
     if (isFetchingBase || isFetchingSpecies) return (<Loader />);
@@ -118,18 +133,17 @@ const Pokemon = () => {
                             <ImagePlaceHolder />
                         </div>
                     }>
-                        <div className='w-[50%] lg:w-[420px] lg:h-[420px] 
+                        <div className='w-[50%] scale-[98%] lg:w-[420px] lg:h-[420px] 
                         flex items-center justify-center self-center mt-10'>
                             <PokemonImage 
-                            src={base?.sprites?.other['official-artwork'].front_default} />
+                            src={image} />
                         </div>
                     </React.Suspense>
-                    <h1 className={`font-bold text-2xl uppercase
+                    <span className={`flex flex-col items-center
+                    font-bold text-2xl uppercase
                     ${type && types[type].textColor}`}>
-                        {base?.name?.replace(/([a-z]+)\-([a-z]+)/g, '$2 $1')
-                        .replace(/\-/g, ' ')
-                        .replace(/gmax/g, 'gigantamax')}
-                    </h1>
+                        <p>{name}</p>
+                    </span>
                     <p className={`font-semibold text-lg cursor-pointer
                     ${type && types[type].backgroundColor}
                     text-white rounded-lg p-2`}
