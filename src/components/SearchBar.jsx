@@ -6,18 +6,20 @@ const SearchBar = ({ search, updateSearch }) => {
     const [visibleBar, setVisibleBar] = useState(false);
     
     return (
-        <div className='flex h-[50px] gap-3 items-center'>
+        <div className='flex h-[50px] gap-3 items-center outline-none
+        border-0 appearance-none'>
             {visibleBar ? (
             <>
             <input 
-            className='rounded-lg p-2 animate-slideleft text-black'
+            className='rounded-lg py-1 px-2 animate-slideleft
+            text-black'
             name='searchInput'
             id='searchInput'
             type='text' 
             value={search} 
             placeholder='e.g. Squirtle' 
             onChange={(e) => {
-                if (/^[a-z]*$/gi.test(e.target.value)) {
+                if (/^[a-z\-]*$/gi.test(e.target.value)) {
                     updateSearch(e.target.value.toLowerCase())
                 }
             }} />
