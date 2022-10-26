@@ -3,9 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const pokemonSlice = createSlice({
     name: 'pokemon',
     initialState: {
-        id: null,
+        name: null,
         type: null,
-        form: null, 
+        variety: null, 
         generation: -1, //generation in which the pokemon is introduced
         version: 'red-blue',
         color: null,
@@ -19,23 +19,26 @@ const pokemonSlice = createSlice({
         selectGenera: null,
     },
     reducers: {
-        setId(state, action) {
-            state.id = action.payload;
+        setName(state, action) {
+            state.name = action.payload;
         },
         setType(state, action) {
             state.type = action.payload;
         },
-        setForm : {
+        setVariety : {
             reducer: (state, action) => {
-                state.form = action.payload;
+                state.variety = action.payload;
             },
-            prepare(form) {
+            prepare(variety, isDefault) {
                 let payload;
-                if (/[a-z]+\-[a-z]{2,}/g.test(form)) {
-                    payload = form;
+                if (!isDefault) {
+                    payload = variety;
                 }
                 return { payload };
             }
+        },
+        setVarieties(state, action) {
+            state.varieties = action.payload;
         },
         setVersion(state, action) {
             state.version = action.payload;
@@ -77,9 +80,9 @@ const pokemonSlice = createSlice({
 })
 
 export const { 
-    setId,
+    setName,
     setType,
-    setForm,
+    setVariety,
     setBase,
     setEvolutions,
     setVersion,
