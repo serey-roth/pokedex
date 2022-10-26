@@ -48,59 +48,19 @@ const EvolutionChain = () => {
                 <div className='flex flex-1 lg:flex-row lg:flex-wrap
                 flex-col w-full gap-5 justify-center items-center
                 lg:h-[200px]'>
-                    {renderEvolutionUI(chain)}
+                    {chain?.map((link, index )=> (
+                        <div key={`link-${index}`}
+                        className='flex flex-row lg:flex-col
+                        lg:max-h-[300px] max-w-[90%] overflow-auto py-2'>
+                            {link.map(item => (
+                                <Evolution key={item.name} evolution={item} />
+                            ))}
+                        </div>
+                    ))}
                 </div>
             )}
-           
         </div>
     )
-}
-
-//render the ui for the evolution chain
-//note that one pokemon might have multiple 2nd evolutions, such as eevee
-const renderEvolutionUI = (chain) => {
-    let result = [];
-    let index = 0;
-    if (!chain) return null;
-    while (index < chain.length) {
-        let item = chain[index];
-        if (item.children <= 1) {
-            result.push(<Evolution key={item.name} name={item.name}
-                details={item.details} />)
-            index++;
-        }
-        else {
-            let children = [];
-            for (let i = 1; i <= item.children; i++) {
-                const child = chain[index + i];
-                children.push(<Evolution key={child.name} name={child.name}
-                details={child.details} />)
-                //separate the chain into groups with each group 
-                //containing the parent and two children
-                if (i % 2 === 0) {
-                    const group = <div className='flex lg:flex-row flex-col gap-1 
-                    items-center justify-center'>
-                        <Evolution key={item.name} name={item.name}
-                        details={item.details} />
-                        <div className='flex lg:flex-col flex-row gap-2 
-                        items-center justify-center'>{children}</div>
-                    </div>
-                    result.push(group)
-                    children = [];
-                }
-            }
-            //if there is a leftover, make a group with one parent and one child
-            result.push(children.length === 1 && (
-                <div className='flex lg:flex-col flex-row gap-2 
-                items-center justify-center'>
-                <Evolution key={item.name} name={item.name}
-                details={item.details} />
-                {children[0]}
-                </div>))
-            index = item.children + 1;
-        }         
-    }
-    return result;
 }
 
 //get the evolution chain of a pokemon
@@ -110,19 +70,17 @@ const renderEvolutionUI = (chain) => {
 //if the evolves_to property is a non-empty array, then there is a next evolution
 //repeat the process for the next evolution
 const getEvolutionChain = (data) => {
-    let chain = data.chain;
+    if (!data) return null;
     const evolutions = [];
     const queue = [];
-    queue.push(chain);
+    queue.push(data.chain);
     while (queue.length > 0) {
         const evolution = queue.shift();
         let children = 0;
         //if there is a next evolution, add to the queue
-        if (evolution.evolves_to.length > 0) {
-            for (let item of evolution.evolves_to) {
-                children += 1;
-                queue.push(item);
-            }
+        for (let item of evolution.evolves_to) {
+            queue.push(item);
+            children++;
         }
         let details = {};
         //if there is an evolution, get the details for that evolution
@@ -136,12 +94,18 @@ const getEvolutionChain = (data) => {
         if (Object.keys(details).length === 0) details = null;
         evolutions.push({
             name: evolution.species.name,
-            id: data?.id,
+            id: evolution.species.url.match(/\/(\d+)\//g)[0]
+            .replace(/\//g, ''),
             details,
             children,
         })
     }
-    return evolutions;
+    //separate the chain based on evolution stage
+    const stages = [];
+    stages.push([evolutions[0]], 
+        evolutions.slice(1, evolutions[0].children + 1),
+        evolutions.slice(evolutions[0].children + 1));
+    return stages;
 }
 
 export default EvolutionChain
