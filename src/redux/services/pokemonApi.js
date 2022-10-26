@@ -11,6 +11,7 @@ export const pokemonApi = createApi({
         getPokemonSpecies: builder.query({ query: (query) => query ? `pokemon-species/${query}` : '' }),
         getPokemonMove: builder.query({ query: (move) => move ? `move/${move}` : '' }),
         getPokemonAbility: builder.query({ query: (ability) => ability ? `ability/${ability}` : '' }),
+        getPokedex: builder.query({ query: (pokedex) => `pokedex/${pokedex}` }),
     })
 })
 
@@ -22,4 +23,5 @@ export const {
     useGetPokemonMoveQuery,
     useGetPokemonAbilityQuery,
     useGetTypingsQuery,
+    useGetPokedexQuery,
 } = pokemonApi;
