@@ -2,7 +2,7 @@ import React from 'react'
 
 import { types } from '../../assets';
 import { useSelector, useDispatch } from 'react-redux';
-import { setForm, setSelectAbility } from '../../redux/features/pokemonSlice';
+import { setVariety, setSelectAbility } from '../../redux/features/pokemonSlice';
 import { setAbilityModal } from '../../redux/features/uiSlice';
 
 const convertToFootInch = (heightMeter) => {
@@ -31,7 +31,7 @@ const BaseInfo = () => {
             <span className='flex gap-2 items-center'>
                 <p className='text-center font-semibold text-black
                 w-[70px]'>No.</p>
-                <p className='flex-1'>{base?.id}</p>
+                <p className='flex-1'>{species?.id}</p>
             </span>
             <span className='flex gap-2 items-center'>
                 <p className='text-center font-semibold text-black
@@ -88,17 +88,26 @@ const BaseInfo = () => {
                 <p className='text-center font-semibold text-black
                 w-[70px]'>Forms</p>
                 <span className='flex flex-wrap gap-2 flex-1'>
-                {species && species.varieties?.map(variety => (
-                    <p key={variety?.pokemon?.name} 
+                {species && species.varieties.map(variety => {
+                    let name;
+                    if (variety.isDefault) {
+                        name = variety.pokemon.name;
+                    } else {
+                        const reg = new RegExp(`${species.name}\-(\[a\-z\-\]\+)`,
+                        'g');
+                        name = variety.pokemon.name.replace(reg, '$1');
+                    } 
+                    return (
+                    <p key={name} 
                     className={`capitalize font-semibold text-center
                     rounded-md py-1 px-2 text-white cursor-pointer
                     ${type && types[type].backgroundColor}`}
-                    onClick={() => dispatch(setForm(variety?.pokemon?.name))}>
-                        {variety?.pokemon?.name.replace(/([a-z]+)\-([a-z]+)/g, '$2 $1')
-                        .replace(/\-/g, ' ')
+                    onClick={() => dispatch(setVariety(variety?.pokemon?.name, 
+                    variety?.is_default))}>
+                        {name.replace(/\-/g, ' ')
                         .replace(/gmax/g, 'gigantamax')}
                     </p>
-                ))}
+                )})}
                 </span>
             </div>
         </div>
