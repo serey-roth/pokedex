@@ -35,7 +35,9 @@ const App = () => {
             });
         }
     }, []);
-    
+
+    //when the user hits the browser back button, 
+    //update the page state based on the location path
     useLayoutEffect(() => {
         if (window.location.pathname === '/') {
             dispatch(updatePage('pokedex'));
@@ -44,6 +46,7 @@ const App = () => {
         }
     }, [window.location.pathname])
 
+    //executes when the page state changes
     useLayoutEffect(() => {
         const option = {
           root: null,
@@ -63,7 +66,7 @@ const App = () => {
     }, [moveModal, abilityModal])
 
     return (
-        <div className='flex flex-col bg-white w-screen min-h-screen relative'>
+        <div className='flex flex-col bg-white/50 w-screen min-h-screen relative'>
             <Routes>
                 <Route element={<PokedexLayout ref={lastElement} />}>
                     <Route path='/'
