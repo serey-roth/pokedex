@@ -8,7 +8,7 @@ import PokemonPlaceHolder from './PokemonPlaceHolder';
 import PokemonType from './PokemonType';
 import ImagePlaceHolder from './ImagePlaceHolder';
 
-import { pokemonApi, useGetPokemonQuery } from '../redux/services/pokemonApi'
+import { pokemonApi, useGetPokemonQuery, useGetPokemonSpeciesQuery } from '../redux/services/pokemonApi'
 import { updatePage } from '../redux/features/uiSlice';
 
 //for lazy loading image
@@ -18,8 +18,11 @@ const PokemonCard = ({ query }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { data, isFetching, error } = useGetPokemonQuery(query);
-    
+    const { data: species, isFetching: isFetchingSpecies, 
+        error: errorSpecies } = useGetPokemonSpeciesQuery(query);
+    const { data, isFetching, error } = useGetPokemonQuery(species ? 
+        species.varieties[0].pokemon.name : null)
+
     const handleClick = (pokemon) => {
         if (pokemon) {
             dispatch(updatePage('pokemon'));
@@ -27,23 +30,26 @@ const PokemonCard = ({ query }) => {
         }
     }
 
-    if (isFetching) 
+    if (isFetchingSpecies && isFetching) 
     return (
         <PokemonPlaceHolder>
             <ImSpinner className='w-[50px] h-[50px] animate-spin' />
         </PokemonPlaceHolder>
     )
 
-    if (error) 
+    if (errorSpecies && error) 
     return (
         <PokemonPlaceHolder>
             Error!
         </PokemonPlaceHolder>
     )
 
+    if (!data?.is_default) return null;
+
     return (
-        <div className={`flex flex-col justify-center 
-        h-fit p-4 border-2 relative gap-2 backdrop-blur-sm`}>
+        <div className={`flex flex-col justify-center sm:w-fit w-full
+        h-fit p-2 border-2 relative backdrop-blur-sm
+        `}>
             <h3 className={`font-[900] text-[2em] italic 
             ${data && types[data.types[0].type.name].textColor}
             absolute top-1`}>
@@ -52,31 +58,30 @@ const PokemonCard = ({ query }) => {
             <React.Suspense 
             fallback={
                 <div className='sm:w-[200px] flex flex-col self-center 
-                h-[300px] sm:h-[200px]'>
+                h-[300px] sm:h-[180px]'>
                     <ImagePlaceHolder />
                 </div>
             }>
                 <div className='sm:w-[200px] flex flex-col self-center 
-                h-[300px] sm:h-[200px]'>
+                h-[300px] sm:h-[180px] sm:scale-[80%]'>
                     <PokemonImage 
                     src={data?.sprites?.other['official-artwork'].front_default} />
                 </div>
              </React.Suspense>
-            <div className='flex flex-wrap items-center w-full break-words'>
-                <h1 className={`flex-1 capitalize font-bold text-2xl
-                cursor-pointer hover:text-black transition-colors
-                ${data && types[data.types[0].type.name].textColor}`}
-                onClick={() => handleClick(data?.name)}>
-                    {data?.name}
-                </h1>
-                <div className='flex items-center gap-1'>
-                {data?.types.map((typeObj) => (
-                    <PokemonType key={typeObj.type.name}
-                    size='w-[40px] h-[40px]'
-                    type={typeObj.type.name} />
-                ))}
-                </div>
-            </div>
+            <h1 className={`text-center flex-1 capitalize font-bold text-xl
+            cursor-pointer hover:text-black transition-colors
+            ${data && types[data.types[0].type.name].textColor}`}
+            onClick={() => handleClick(data?.name)}>
+                {data?.name?.replace(/\-[a-z]{3,}$/g, '')}
+            </h1>
+            <div className='flex flex-col items-center gap-1 absolute
+            top-2 right-2'>
+            {data?.types.map((typeObj) => (
+                <PokemonType key={typeObj.type.name}
+                size='w-[40px] h-[40px]'
+                type={typeObj.type.name} />
+            ))}
+            </div> 
         </div>
     )
 }
