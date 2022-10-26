@@ -12,9 +12,10 @@ import EvolutionArrow from './EvolutionArrow';
 
 const PokemonImage = React.lazy(() => import('../PokemonImage'));
 
-const Evolution = ({ name, details }) => {
+const Evolution = ({ evolution }) => {
     const navigate = useNavigate();
-    const { data, isFetching } = useGetPokemonQuery(name);
+    const { id, name, details } = evolution;
+    const { data, isFetching } = useGetPokemonQuery(id);
 
     if (isFetching) 
     return (
@@ -45,7 +46,7 @@ const Evolution = ({ name, details }) => {
                     ${data && types[data.types[0].type.name].backgroundColor}
                     text-white rounded-lg p-2`}
                     onClick={() => navigate(`/pokemon/${data?.id}`)}>
-                        {data?.name}
+                        {name}
                     </p>
                 </div>
                 <div className='flex items-center gap-1'>
