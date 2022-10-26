@@ -15,11 +15,11 @@ const PokemonType = ({ type, size }) => {
 
     return (
         <div className={`rounded-full 
-        ${size} lg:w-[40px] lg:h-[40px]
+        ${size} lg:w-[30px] lg:h-[30px]
         flex items-center justify-center backdrop-blur-sm z-0
         ${type && types[type].backgroundColor}`}>
             <img src={imgUrl} alt={type} 
-            className='p-[5px] lg:p-[10px]'/>
+            className='p-[5px]'/>
         </div>
     )
 }
