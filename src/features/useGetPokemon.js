@@ -10,11 +10,13 @@ export const useGetPokemon = (query) => {
         error: errorBase
     } = useGetPokemonQuery(query);
 
+    //if the query is non-default form of a pokemon like mega evolutions,
+    //then we don't fetch the species data 
     const { 
         data: species, 
         isFetching: isFetchingSpecies, 
         error: errorSpecies
-    } = useGetPokemonSpeciesQuery(/[a-z]+\-[a-z]+/g.test(query) ? null : query);
+    } = useGetPokemonSpeciesQuery(base?.is_default ? query.replace(/\-[a-z]{3,}$/g, '') : null);
     
     const result = {
         base,
