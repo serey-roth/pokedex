@@ -138,3 +138,19 @@ tbody tr:nth-of-type(2n + 1) {
     font-size: 0.5em;
   }
 }
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+div::-webkit-scrollbar {
+  display: block;
+  width: 5px;
+  height: 5px;
+  background: linear-gradient(red,  blue)
+}
+
+div::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgb(59, 42, 42);
+}
