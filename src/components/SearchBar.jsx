@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-import { ImCancelCircle, ImCheckmark, ImSearch } from 'react-icons/im';
+import { ImCancelCircle, ImSearch } from 'react-icons/im';
 
-const SearchBar = ({ search, updateSearch }) => {
+const SearchBar = ({ search, onChange }) => {
     const [visibleBar, setVisibleBar] = useState(false);
     
     return (
@@ -18,11 +18,7 @@ const SearchBar = ({ search, updateSearch }) => {
             type='text' 
             value={search} 
             placeholder='e.g. Squirtle' 
-            onChange={(e) => {
-                if (/^[a-z\-]*$/gi.test(e.target.value)) {
-                    updateSearch(e.target.value.toLowerCase())
-                }
-            }} />
+            onChange={onChange} />
             <button className='animate-slideleft' 
             onClick={() => {
                 setVisibleBar(false);
