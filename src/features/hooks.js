@@ -25,7 +25,7 @@ export const usePokemon = (id) => {
         ['pokemon', id],
         () => pokemonApi.getPokemon(id),
         {
-            keepPreviousData,
+            keepPreviousData: true,
         }
     )
 }
@@ -35,7 +35,7 @@ export const useEvolutions = (speciesId) => {
         ['evolutions', speciesId],
         () => pokemonApi.getEvolutions(speciesId),
         {
-            keepPreviousData,
+            keepPreviousData: true,
         }
     )
 }
@@ -45,7 +45,7 @@ export const useSpecies = (id) => {
         ['species', id],
         () => pokemonApi.getSpecies(id),
         {
-            keepPreviousData,
+            keepPreviousData: true,
         }
     )
 }
@@ -55,7 +55,7 @@ export const useAbility = (ability) => {
         ['ability', ability],
         () => pokemonApi.getAbility(ability),
         {
-            keepPreviousData,
+            keepPreviousData: true,
         }
     )
 }
@@ -65,7 +65,7 @@ export const useMove = (move) => {
         ['move', move],
         () => pokemonApi.getMove(move),
         {
-            keepPreviousData,
+            keepPreviousData: true,
         }
     )
 }
@@ -75,7 +75,7 @@ export const usePokedex = (pokedex) => {
         ['pokedex', pokedex],
         () => pokemonApi.getPokedex(pokedex),
         {
-            keepPreviousData,
+            keepPreviousData: true,
         }
     )
 }
@@ -85,7 +85,7 @@ export const useType = (type) => {
         ['type', type],
         () => pokemonApi.getType(type),
         {
-            keepPreviousData,
+            keepPreviousData: true,
         }
     )
 }
