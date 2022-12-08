@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux';
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ImSpinner } from 'react-icons/im'
 
@@ -8,36 +7,36 @@ import PokemonPlaceHolder from './PokemonPlaceHolder';
 import PokemonType from './PokemonType';
 import ImagePlaceHolder from './ImagePlaceHolder';
 
-import { pokemonApi, useGetPokemonQuery, useGetPokemonSpeciesQuery } from '../redux/services/pokemonApi'
-import { updatePage } from '../redux/features/uiSlice';
+import { usePokemon } from '../features/hooks';
 
 //for lazy loading image
 const PokemonImage = React.lazy(() => import('./PokemonImage'))
 
 const PokemonCard = ({ query }) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
-    const { data: species, isFetching: isFetchingSpecies, 
-        error: errorSpecies } = useGetPokemonSpeciesQuery(query);
-    const { data, isFetching, error } = useGetPokemonQuery(species ? 
-        species.varieties[0].pokemon.name : null)
+    const { 
+        data,
+        isFetching,
+        isLoading,
+        error,
+        isError
+    } = usePokemon(query);
 
     const handleClick = (pokemon) => {
         if (pokemon) {
-            dispatch(updatePage('pokemon'));
             navigate(`/pokemon/${pokemon}`);
         }
     }
 
-    if (isFetchingSpecies && isFetching) 
+    if (isLoading && isFetching) 
     return (
         <PokemonPlaceHolder>
             <ImSpinner className='w-[50px] h-[50px] animate-spin' />
         </PokemonPlaceHolder>
     )
 
-    if (errorSpecies && error) 
+    if (isError && error) 
     return (
         <PokemonPlaceHolder>
             Error!
