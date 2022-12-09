@@ -17,6 +17,8 @@ import Stats from '../components/stats/Stats'
 import MovePool from '../components/moves/MovePool'
 import EvolutionChain from '../components/evolutions/EvolutionChain'
 import Typing from '../components/Typing'
+import AbilityModal from '../components/modal/AbilityModal'
+import MoveModal from '../components/modal/MoveModal'
 
 const PokedexEntry = ({ version, text }) => (
     <div className='flex flex-col gap-1 lg:w-[80%]'>
@@ -126,7 +128,7 @@ const Pokemon = () => {
                     rounded-lg p-2 ${type && `${types[type].backgroundColor} text-white`}`}>
                         Pokedex Entries
                     </h1>
-                    {getPokedexEntries(getVersions(version), species).map(entry => (
+                    {getPokedexEntries(getVersions(selections.version), species).map(entry => (
                         <PokedexEntry 
                         key={entry.version} 
                         version={entry.version}
@@ -147,6 +149,10 @@ const Pokemon = () => {
                     />
                 </div> 
             </div> 
+
+            {selections.ability && (<AbilityModal />)}
+
+            {selections.move && (<MoveModal />)}
         </ErrorBoundary>
     )
 }
