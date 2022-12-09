@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
 import { types } from '../../assets'
-import { useSelector } from 'react-redux';
 
 import MoveTable from './MoveTable'
+import { usePokemonContext } from '../../features/pokemonContext';
 
 const learnedMethods = {
     'level up': 'level-up',
@@ -12,13 +12,11 @@ const learnedMethods = {
     'tutor': 'tutor',
 
 }
-const MovePool = () => {
-    const {generation, selectGeneration, type} = useSelector(state => state.pokemon);
+const MovePool = ({ moves, currentGeneration, selectedGeneration, version }) => {
+    const { type } = usePokemonContext();
     const [method, setMethod] = useState('level up');
-    const data = useSelector(state => state.pokemon.base?.moves);
-
     //check if the pokemon exists in the generation of the game that the user selects
-    const existing = generation <= selectGeneration;
+    const existing = currentGeneration <= selectedGeneration;
 
     return (
         <div className='flex flex-col gap-3 w-full items-center
@@ -44,7 +42,7 @@ const MovePool = () => {
                 ))}
             </div>
             <MoveTable type={type} learnedMethod={learnedMethods[method]}
-            moveData={data} existing={existing} />
+            moveData={moves} existing={existing} version={version} />
         </div>
     )
 }
