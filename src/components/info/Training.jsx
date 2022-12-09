@@ -1,10 +1,6 @@
 import React from 'react'
 
-import { usePokemonContext } from '../../features/pokemonContext'
-
-const Training = () => {
-    const { baseData: base, speciesData: species } = usePokemonContext()
-
+const Training = ({ base, species }) => {
     return (
         <div className='flex flex-col flex-wrap gap-2'>
             <h2 className='font-semibold text-lg w-full text-center'>Training</h2>

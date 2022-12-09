@@ -15,8 +15,8 @@ const getImgUrl = (icon) => {
         import.meta.url).href;
 }
 
-const BaseInfo = () => {
-    const { type, baseData: base, speciesData: species } = usePokemonContext();
+const BaseInfo = ({ base, species }) => {
+    const { type } = usePokemonContext();
     
     const handleClick = (name) => {
     }

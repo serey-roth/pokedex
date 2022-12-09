@@ -1,11 +1,7 @@
 import React from 'react'
 import { BsGenderFemale, BsGenderMale } from 'react-icons/bs'
 
-import { usePokemonContext } from '../../features/pokemonContext'
-
-const Breeding = () => {
-    const { speciesData: species } = usePokemonContext();
-
+const Breeding = ({ species }) => {
     return (
         <div className='flex flex-col flex-wrap gap-2'>
             <h2 className='font-semibold text-lg w-full text-center'>Breeding</h2>
