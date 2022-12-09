@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { PokemonContextProvider } from './features/pokemonContext';
 
 import Pokedex from './pages/Pokedex';
 import Pokemon from './pages/Pokemon';
@@ -13,7 +14,11 @@ const App = () => {
                 <Router>
                     <Routes>
                         <Route path='/' element={<Pokedex />} />
-                        <Route path='/pokemon/:id' element={<Pokemon />} />
+                        <Route path='/pokemon/:id' element={
+                            <PokemonContextProvider>
+                                <Pokemon />
+                            </PokemonContextProvider>
+                        } />
                     </Routes>
                 </Router>
             </QueryClientProvider>
