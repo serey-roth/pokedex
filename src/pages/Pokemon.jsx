@@ -68,18 +68,12 @@ const Pokemon = () => {
     const { id } = useParams();
 
     const { 
-        handleBaseDataChange, 
-        handleSpeciesDataChange, 
+        variety,
+        version,
         handleTypeChange 
     } = usePokemonContext();
 
     const pokemonRef = useRef();
-    
-    const [variety, setVariety] = useState('');
-    const [version, setVersion] = useState('red-blue');
-
-    const [moveModal, setMoveModal] = useState(false);
-    const [abilityModal, setabilityModal] = useState(false);
 
     const { 
         data: base,
@@ -115,14 +109,9 @@ const Pokemon = () => {
 
     useEffect(() => {
         if (base) {
-            handleBaseDataChange(base);
             handleTypeChange(base.types[0].type.name);
         }
     }, [base])
-
-    useEffect(() => {
-        if (species) handleSpeciesDataChange(species)
-    }, [species])
 
     const handleVersionChange = (e) => {
         setVersion(e.target.value);
@@ -132,15 +121,17 @@ const Pokemon = () => {
         navigate('/');
     }
 
+    if (isFetchingBase || isFetchingSpecies || isLoadingBase || isLoadingSpecies) return (<Loader />);
+
+    if ((isErrorSpecies && errorSpecies) || (isErrorBase && errorBase) || (!base || !species)) return (<Error />)
+
     let image = base?.sprites?.other['official-artwork'].front_default;
     if (base && /starter/g.test(base.name)) {
         image = new URL(`../assets/artworks/${variety}.png`, 
         import.meta.url).href;
     }
 
-    if (isFetchingBase || isFetchingSpecies || isLoadingBase || isLoadingSpecies) return (<Loader />);
-
-    if ((isErrorSpecies && errorSpecies) || (isErrorBase && errorBase) || (!base || !species)) return (<Error />)
+    const type = base?.types[0]?.type.name;
 
     return (
         <ErrorBoundary>
@@ -164,14 +155,14 @@ const Pokemon = () => {
                         width='100%' />
                         <p>{species?.name}</p>
                     </span>
-                    <p className={`font-semibold text-lg cursor-pointer rounded-lg p-2`}>
+                    <p className='font-semibold text-lg cursor-pointer rounded-lg p-2'>
                         {species?.genera[7]?.genus}
                     </p>
                 </div>
 
                 <div className='flex flex-col px-5 items-center gap-3 w-full'>
                     <h1 className={`font-bold text-xl uppercase
-                    rounded-lg p-2`}>
+                    rounded-lg p-2 ${type && `${types[type].backgroundColor} text-white`}`}>
                         Pokedex Entries
                     </h1>
                     {getPokedexEntries(getVersions(version), species).map(entry => (
@@ -187,7 +178,7 @@ const Pokemon = () => {
                 w-full px-5'>
                     <Info base={base} species={species} />
                     <Typing pokemonTypes={base?.types}/>
-                    <Stats baseData={base}/>
+                    <Stats base={base}/>
                     <EvolutionChain species={species}/>
                     <MovePool 
                     moves={base?.moves} 
