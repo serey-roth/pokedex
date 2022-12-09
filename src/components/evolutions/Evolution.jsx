@@ -1,32 +1,17 @@
 import React from 'react'
-import { ImSpinner } from 'react-icons/im';
 
-import { useGetPokemonQuery } from '../../redux/services/pokemonApi'
-
-import ImagePlaceHolder from '../ImagePlaceHolder';
 import PokemonType from '../PokemonType';
 
 import { types } from '../../assets';
 import { useNavigate } from 'react-router-dom';
 import EvolutionArrow from './EvolutionArrow';
-
-const PokemonImage = React.lazy(() => import('../PokemonImage'));
+import { usePokemon } from '../../features/hooks';
+import LoadedImage from '../LoadedImage';
 
 const Evolution = ({ evolution }) => {
     const navigate = useNavigate();
     const { id, name, details } = evolution;
-    const { data, isFetching } = useGetPokemonQuery(id);
-
-    if (isFetching) 
-    return (
-        <div className='w-[150px] lg:w-50px flex relative flex-col
-        items-center justify-center'>
-            <ImagePlaceHolder>
-                <ImSpinner className='absolute inset-0
-                w-[50px] h-[50px] animate-spin' />
-            </ImagePlaceHolder>
-        </div>
-    )
+    const { data } = usePokemon(id, ['pokemon', 'evolution']);
 
     return (
         <div className='flex lg:flex-row flex-col items-center justify-center'>
@@ -34,16 +19,12 @@ const Evolution = ({ evolution }) => {
                 <EvolutionArrow details={details} />
             )}
             <div className='flex flex-col items-center justify-center gap-2'>
-                <React.Suspense fallback={<ImagePlaceHolder />}>
-                    <div className='w-[150px] lg:w-50px'>
-                        <PokemonImage
-                        src={data?.sprites?.other['official-artwork'].front_default} />
-                    </div>
-                </React.Suspense>
+                <LoadedImage 
+                height={200}
+                src={data?.sprites?.other['official-artwork'].front_default} />
                 <div className='flex flex-col items-center gap-1'>
                     <p>#{data?.id}</p>
                     <p className={`font-semibold capitalize cursor-pointer
-                    ${data && types[data.types[0].type.name].backgroundColor}
                     text-white rounded-lg p-2`}
                     onClick={() => navigate(`/pokemon/${data?.id}`)}>
                         {name}
