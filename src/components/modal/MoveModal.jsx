@@ -1,23 +1,19 @@
 import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux';
 
 import { types } from '../../assets';
-import { useGetPokemonMoveQuery } from '../../redux/services/pokemonApi';
-import { setMoveModal } from '../../redux/features/uiSlice';
 
 import MoveStats from './MoveStats';
 import Info from './Info';
 import ModalPortal from './ModalPortal';
+import { usePokemonContext } from '../../features/pokemonContext';
 
 const MoveModal = () => {
-    const dispatch = useDispatch();
     const {
         type, 
         version, 
         selectMove: move, 
-    } = useSelector(state => state.pokemon);
-    const visible = useSelector(state => state.ui.moveModal)
-    const { data, isFetching, error } = useGetPokemonMoveQuery(move);
+    } = usePokemonContext();
+    const { data, isFetching, error } = useMove(move);
 
     const effectObj = data?.effect_entries?.find(entry => 
         entry?.language?.name === 'en');
@@ -27,7 +23,7 @@ const MoveModal = () => {
         entry?.version_group?.name === version);
 
     const handleClose = () => {
-        dispatch(setMoveModal(false));
+        
     }
 
     //when the user hits the escape key, we want to close the modal
