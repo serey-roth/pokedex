@@ -1,5 +1,4 @@
-import React, { useState, useEffect, createRef, useMemo } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState, useMemo, useEffect } from 'react'
 
 import Loader from '../components/Loader';
 import Error from '../components/Error';
@@ -40,8 +39,6 @@ const Pokedex = () => {
     }
 
     const visibleData = useMemo(() => {
-        if (isPreviousData) return;
-
         if (data) {
             let pokemons = data.pokemon_entries;
 
@@ -50,11 +47,11 @@ const Pokedex = () => {
                 pokemon.pokemon_species.name.includes(search.toLowerCase()));
             }
 
-            return pokemons.slice((page - 1) * ITEMS_PER_PAGE, ITEMS_PER_PAGE);
+            return pokemons.slice(0, page * ITEMS_PER_PAGE);
         } else {
             return [];
         }
-    }, [page, data, isPreviousData, search]);
+    }, [page, data, region, search]);
 
     if (isLoading || isFetching) return (<Loader />)
 
@@ -80,15 +77,18 @@ const Pokedex = () => {
                     onChange={handleRegionChange} />
             </span>
 
-            <div className='grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-10 mx-2'>
-                {visibleData.map(entry => (
-                    <PokemonCard query={entry.entry_number} />
+            <div className='grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-10 mx-2'>
+                {visibleData?.map(entry => (
+                    <PokemonCard key={entry.entry_number} query={entry.entry_number} />
                 ))}
             </div>
 
             <button 
+            type='button'
             className='border-slate-500 mx-2 mb-2 bg-black text-white
             py-2' 
+            disabled={isPreviousData || 
+            (page * ITEMS_PER_PAGE >= data?.pokemon_entries?.length)}
             onClick={handleLoadMore}>
                 Load More
             </button>
