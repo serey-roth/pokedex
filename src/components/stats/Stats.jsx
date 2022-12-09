@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux';
 
 import { types } from '../../assets';
+import { usePokemonContext } from '../../features/pokemonContext';
 import StatsProgress from './StatsProgress';
 
 const calculateHP = (base, iv, ev, level) => {
@@ -15,7 +15,7 @@ const calculateOtherStat = (base, iv, ev, level, nature) => {
 }
 
 const StatMode = ({ mode, active, setMode }) => {
-    const type = useSelector(state => state.pokemon.type);
+    const { type } = usePokemonContext();
 
     return (
         <button 
@@ -29,33 +29,33 @@ const StatMode = ({ mode, active, setMode }) => {
     )
 }
 
-const Stats = () => {
+const Stats = ({ baseData: base }) => {
     const [mode, setMode] = useState('base');
     const [stats, setStats] = useState(null);
     const [proportions, setProportions] = useState(null);
     const [level, setLevel] = useState(1);
     
-    const { type, base: data } = useSelector(state => state.pokemon);
+    const { type } = usePokemonContext();
 
     useEffect(() => {
         let statsData;
         let proportionData;
-        if (data) {
+        if (base) {
             switch (mode) {
                 case 'min': {
-                    statsData = data.stats.map((stat, idx) => 
+                    statsData = base.stats.map((stat, idx) => 
                     idx === 0 ? calculateHP(stat.base_stat, 0, 0, level)
                     : calculateOtherStat(stat.base_stat, 0, 0, level, 0.9))
                     break;
                 }
                 case 'max' : {
-                    statsData = data.stats.map((stat, idx) => 
+                    statsData = base.stats.map((stat, idx) => 
                     idx === 0 ? calculateHP(stat.base_stat, 31, 252, level)
                     : calculateOtherStat(stat.base_stat, 31, 252, level, 1.1))
                     break;
                 } 
                 default : {
-                    statsData = data.stats.map(stat => stat.base_stat);
+                    statsData = base.stats.map(stat => stat.base_stat);
                 }
             }
             const maxStat = Math.max(...statsData);
@@ -70,7 +70,7 @@ const Stats = () => {
         }
         setStats(statsData);
         setProportions(proportionData);
-    }, [level, mode, data]);
+    }, [level, mode]);
 
     return (
         <div className='flex flex-col flex-1 w-full py-5 gap-3 items-center'>

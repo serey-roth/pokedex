@@ -1,10 +1,11 @@
 import React from 'react'
 
 import { types } from '../../assets'
-import { useSelector } from 'react-redux';
+
+import { usePokemonContext } from '../../features/pokemonContext';
 
 const StatsProgress = ({ label, proportion, value }) => {
-    const type = useSelector(state => state.pokemon.type);
+    const { type } = usePokemonContext();
     
     return (
         <div className='flex flex-row gap-1 flex-1 items-center'>

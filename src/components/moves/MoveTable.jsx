@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import MoveRow from './MoveRow';
 
 import { types } from '../../assets'
-import { useSelector } from 'react-redux';
+import { usePokemonContext } from '../../features/pokemonContext';
 
 //get all the moves based on the learned method and the chosen 
 //version of the game
@@ -38,8 +38,8 @@ const sortMoves = (learnedMethod, moves) => {
     }
 }
 
-const MoveTable = ({learnedMethod, moveData, existing}) => {
-    const { type, version } = useSelector(state => state.pokemon);
+const MoveTable = ({learnedMethod, moveData, existing, version}) => {
+    const { type } = usePokemonContext();
 
     let moves;
 
