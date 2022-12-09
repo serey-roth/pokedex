@@ -71,10 +71,11 @@ const Pokedex = () => {
                     onChange={handleSearchChange} />
             </div>
             
-            <span className='justify-self-end mx-2'>
-            <PokedexRegions 
-                    region={region} 
-                    onChange={handleRegionChange} />
+            <span className='flex items-center mx-2'>
+                <p className='self-center flex-1'>{data?.pokemon_entries?.length} found</p>
+                <PokedexRegions 
+                        region={region} 
+                        onChange={handleRegionChange} />
             </span>
 
             <div className='grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-10 mx-2'>
