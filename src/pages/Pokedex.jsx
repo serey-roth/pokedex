@@ -35,6 +35,10 @@ const Pokedex = () => {
         }
     }
 
+    const handlePageChange = (page) => {
+        setPage(page);
+    }
+
     const visibleData = useMemo(() => {
         if (isPreviousData) return;
 
