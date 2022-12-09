@@ -2,7 +2,6 @@ import React from 'react'
 
 import PokemonType from '../PokemonType';
 
-import { types } from '../../assets';
 import { useNavigate } from 'react-router-dom';
 import EvolutionArrow from './EvolutionArrow';
 import { usePokemon } from '../../features/hooks';
