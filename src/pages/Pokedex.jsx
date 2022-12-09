@@ -58,7 +58,7 @@ const Pokedex = () => {
     if (isError && error) return (<Error />);
 
     return (
-        <div className='w-full grid gap-2 relative min-h-screen'>
+        <div className='w-full flex flex-col gap-2 relative min-h-screen'>
             <div className='w-full flex flex-wrap items-center px-3 py-1
             bg-black text-white'>
                 <h1 className='animate-slideleft font-bold uppercase text-2xl
@@ -78,9 +78,12 @@ const Pokedex = () => {
             </span>
 
             <div className='grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-10 mx-2'>
-                {visibleData?.map(entry => (
-                    <PokemonCard key={entry.entry_number} query={entry.entry_number} />
-                ))}
+                {visibleData?.map(entry => {
+                    const speciesId = Number(entry.pokemon_species.url.match(/\d+\/$/g)[0].replace(/\//g, ''));
+                    return (
+                    <PokemonCard key={entry.entry_number} query={speciesId} />
+                    )
+                })}
             </div>
 
             <button 
