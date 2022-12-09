@@ -1,10 +1,7 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux';
 
 import { types } from '../assets';
-
-import { setSelectGeneration, setVersion } from '../redux/features/pokemonSlice';
-
+import { usePokemonContext } from '../features/pokemonContext';
 const versions = {
     'red/blue': 'red-blue',
     'yellow': 'yellow' ,
@@ -26,11 +23,20 @@ const versions = {
     'sword/shield': 'sword-shield',
 }
 
-const GameVersions = ({ version, onChange }) => {
+const GameVersions = () => {
+    const { selections, handleSelectionsChange } = usePokemonContext();
+    
+    const handleVersionChange = (e) => {
+        handleSelectionsChange({
+            name: 'version',
+            value: e.target.value,
+        });
+    }
+
     return (
         <select className={`rounded-lg p-2 uppercase bg-white bg-opacity-80
         font-bold outline-none border-2`}
-        value={version}
+        value={selections.version}
         onChange={onChange}>
         {Object.keys(versions).map(gameVersion => (
             <option key={`version-${gameVersion}`}
