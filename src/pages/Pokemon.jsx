@@ -25,6 +25,7 @@ import ErrorBoundary from '../components/ErrorBoundary'
 import Loader from '../components/Loader'
 import Error from '../components/Error'
 import { usePokemon, useSpecies } from '../features/hooks'
+import LoadedImage from '../components/LoadedImage'
 
 const PokemonImage = React.lazy(() => import('../components/PokemonImage'));
 const Stats = React.lazy(() => import('../components/stats/Stats'));
@@ -130,29 +131,32 @@ const Pokemon = () => {
     return (
         <ErrorBoundary>
             <div className='w-screen min-h-screen flex flex-col items-center 
-            gap-10 animate-slidedown relative' ref={pokemonRef}>
-                <div className={`fixed w-screen z-10 flex items-center flex-wrap
-                p-3 text-black gap-3 justify-center`}>
-                    <FiChevronLeft className='font-bold text-xl cursor-pointer' 
-                    onClick={handleReturn}/>
-                    <h1 className='font-bold uppercase text-2xl'>
-                        Pokedex
-                    </h1>
+            gap-5 animate-slidedown relative' ref={pokemonRef}>
+
+                <div className='w-full flex items-center flex-wrap
+                p-3 text-black gap-3 justify-center'>
+                    <FiChevronLeft 
+                        className='font-bold text-xl cursor-pointer' 
+                        onClick={handleReturn}/>
+
                     <GameVersions version={version} onChange={handleVersionChange} />
                 </div>
-                <div className='flex flex-col items-center 
-                w-full justify-center gap-1 lg:mt-10 mt-20'>
+
+                <div className='flex flex-col items-center w-full justify-center gap-1'>
                     <span className={`flex flex-col items-center
                     font-bold text-2xl uppercase`}>
+                        <LoadedImage 
+                        src={image}
+                        width='100%' />
                         <p>{species?.name}</p>
                     </span>
-                    <p className={`font-semibold text-lg cursor-pointer
-                    text-white rounded-lg p-2`}>
+                    <p className={`font-semibold text-lg cursor-pointer rounded-lg p-2`}>
                         {species?.genera[7]?.genus}
                     </p>
                 </div>
+
                 <div className='flex flex-col px-5 items-center gap-3 w-full'>
-                    <h1 className={`font-bold text-xl uppercase text-white
+                    <h1 className={`font-bold text-xl uppercase
                     rounded-lg p-2`}>
                         Pokedex Entries
                     </h1>
