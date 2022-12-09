@@ -12,11 +12,33 @@ const learnedMethods = {
     'tutor': 'tutor',
 
 }
-const MovePool = ({ moves, currentGeneration, selectedGeneration, version }) => {
-    const { type } = usePokemonContext();
+
+const generations = {
+    'red-blue': 1,
+    'yellow': 1 ,
+    'gold-silver': 2 ,
+    'crystal': 2 ,
+    'ruby-sapphire': 3 ,
+    'emerald': 3 ,
+    'firered-leafgreen': 3 ,
+    'diamond-pearl': 4 ,
+    'platinum': 4 ,
+    'heartgold-soulsilver': 4 ,
+    'black-white': 5 ,
+    'black-2-white-2': 5 ,
+    'x-y': 6 ,
+    'omega-ruby-alpha-sapphire': 6 ,
+    'sun-moon': 7 ,
+    'ultra-sun-ultra-moon': 7 ,
+    'lets-go-pikachu-lets-go-eevee': 7 ,
+    'sword-shield': 8,
+}
+
+const MovePool = ({ moves, pokemonGeneration }) => {
+    const { type, selections } = usePokemonContext();
     const [method, setMethod] = useState('level up');
     //check if the pokemon exists in the generation of the game that the user selects
-    const existing = currentGeneration <= selectedGeneration;
+    const existing = pokemonGeneration <= generations(selections.version);
 
     return (
         <div className='flex flex-col gap-3 w-full items-center
