@@ -1,9 +1,10 @@
 import React from 'react'
 
 import { types } from '../../assets';
-import { useSelector, useDispatch } from 'react-redux';
+
 import { setVariety, setSelectAbility } from '../../redux/features/pokemonSlice';
 import { setAbilityModal } from '../../redux/features/uiSlice';
+import { usePokemonContext } from '../../features/pokemonContext';
 
 const convertToFootInch = (heightMeter) => {
     return `(${Math.floor(heightMeter * 0.3281)}''${Math.floor((heightMeter * 0.3281 % 1) * 12)}')`;
@@ -15,12 +16,9 @@ const getImgUrl = (icon) => {
 }
 
 const BaseInfo = () => {
-    const dispatch = useDispatch();
-    const { type, base, species } = useSelector(state => state.pokemon);
+    const { type, baseData: base, speciesData: species } = usePokemonContext();
     
     const handleClick = (name) => {
-        dispatch(setAbilityModal(true));
-        dispatch(setSelectAbility(name))
     }
 
     return (

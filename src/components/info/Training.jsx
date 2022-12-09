@@ -1,8 +1,9 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+
+import { usePokemonContext } from '../../features/pokemonContext'
 
 const Training = () => {
-    const { base, species } = useSelector(state => state.pokemon);
+    const { baseData: base, speciesData: species } = usePokemonContext()
 
     return (
         <div className='flex flex-col flex-wrap gap-2'>
