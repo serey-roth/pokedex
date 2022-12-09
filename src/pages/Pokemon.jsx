@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FiChevronLeft } from 'react-icons/fi'
-import { ImSpinner } from 'react-icons/im'
 
 import { types } from '../assets'
 
@@ -173,8 +172,7 @@ const Pokemon = () => {
                     <Stats base={base}/>
                     <EvolutionChain species={species}/>
                     <MovePool 
-                    moves={base?.moves} 
-                    version={version}
+                    moves={base?.moves}
                     selectedGeneration={generations[version]}
                     currentGeneration={getGenerationNumber(species.generation.name.replace(/generation\-/g, ''))}
                     />
