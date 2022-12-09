@@ -38,7 +38,7 @@ const MovePool = ({ moves, pokemonGeneration }) => {
     const { type, selections } = usePokemonContext();
     const [method, setMethod] = useState('level up');
     //check if the pokemon exists in the generation of the game that the user selects
-    const existing = pokemonGeneration <= generations(selections.version);
+    const existing = pokemonGeneration <= generations[selections.version];
 
     return (
         <div className='flex flex-col gap-3 w-full items-center
@@ -64,7 +64,7 @@ const MovePool = ({ moves, pokemonGeneration }) => {
                 ))}
             </div>
             <MoveTable type={type} learnedMethod={learnedMethods[method]}
-            moveData={moves} existing={existing} version={version} />
+            moveData={moves} existing={existing} version={selections.version} />
         </div>
     )
 }
