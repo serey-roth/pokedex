@@ -9,12 +9,45 @@ import PokemonType from '../PokemonType';
 import { useMove } from '../../features/hooks';
 import { usePokemonContext } from '../../features/pokemonContext';
 
+const LoadingRow = (<tr className='animate-pulse bg-slate-300 w-full h-[40px]'>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>)
+
+const ErrorRow = (<tr className='animate-pulse bg-rose-300 w-full h-[40px]'>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>)
+
 const MoveRow = ({ level, name }) => {
     const { type } = usePokemonContext();
-    const { data, isFetching, error } = useMove(name)
+    const { 
+        data, 
+        isFetching, 
+        error,
+        isError,
+        isLoading
+    } = useMove(name)
 
     const handleClick = () => {
     }
+
+    if (isLoading || isFetching) return LoadingRow;
+    if (isError && error) return ErrorRow;
 
     return (
         <tr className={`${type && types[type].hoverColor} hover:text-white
