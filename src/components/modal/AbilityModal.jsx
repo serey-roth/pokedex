@@ -7,7 +7,7 @@ import { usePokemonContext } from '../../features/pokemonContext';
 import Info from './Info';
 import ModalPortal from './ModalPortal';
 
-const MoveModal = () => {
+const AbilityModal = () => {
     const {
         type, 
         version, 
@@ -58,4 +58,4 @@ const MoveModal = () => {
     )
 }
 
-export default MoveModal
+export default AbilityModal
