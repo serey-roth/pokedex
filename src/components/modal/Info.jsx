@@ -1,10 +1,10 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
 
 import { types } from '../../assets';
+import { usePokemonContext } from '../../features/pokemonContext';
 
 const Info = ({description, effect, shortEffect}) => {
-    const type = useSelector(state => state.pokemon.type);
+    const { type } = usePokemonContext();
 
     const textArray = effect?.split('\n\n');
 
