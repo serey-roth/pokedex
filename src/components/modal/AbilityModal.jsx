@@ -1,22 +1,19 @@
 import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux';
 
 import { types } from '../../assets';
-import { useGetPokemonAbilityQuery } from '../../redux/services/pokemonApi';
-import { setAbilityModal } from '../../redux/features/uiSlice';
+import { useAbility } from '../../features/hooks';
+import { usePokemonContext } from '../../features/pokemonContext';
 
 import Info from './Info';
 import ModalPortal from './ModalPortal';
 
 const MoveModal = () => {
-    const dispatch = useDispatch();
     const {
         type, 
         version, 
         selectAbility: ability
-    } = useSelector(state => state.pokemon);
-    const visible = useSelector(state => state.ui.abilityModal)
-    const { data, isFetching, error } = useGetPokemonAbilityQuery(ability);
+    } = usePokemonContext();
+    const { data, isFetching, error } = useAbility(ability);
 
     const effectObj = data?.effect_entries?.find(entry => 
         entry?.language?.name === 'en');
