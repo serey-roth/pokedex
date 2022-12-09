@@ -54,10 +54,9 @@ const generations = {
     'sword-shield': 8,
 }
 
-const PokedexEntry = ({version, text, type}) => (
+const PokedexEntry = ({ version, text }) => (
     <div className='flex flex-col gap-1 lg:w-[80%]'>
-        <h2 className={`font-semibold uppercase
-        ${type && types[type].textColor} text-center`}>
+        <h2 className={`font-semibold uppercase text-center`}>
             pokemon {version.replace(/\-/g, ' ')}
         </h2>
         <p className='italic text-center'>
@@ -160,13 +159,13 @@ const Pokemon = () => {
                     rounded-lg p-2`}>
                         Pokedex Entries
                     </h1>
-{/*                     {{getPokedexEntries(getVersions(version), storedSpecies).map(entry => (
-                    <PokedexEntry 
-                    key={entry.version} 
-                    version={entry.version}
-                    type={type}
-                    text={entry.text} />}
-                    ))} */}
+                    {getPokedexEntries(getVersions(version), species).map(entry => (
+                        <PokedexEntry 
+                        key={entry.version} 
+                        version={entry.version}
+                        text={entry.text} />
+                        ))
+                    }
                 </div>
                 {/* <div className='flex flex-col items-center
                 w-full px-5'>
