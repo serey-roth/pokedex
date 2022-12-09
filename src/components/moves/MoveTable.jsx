@@ -62,8 +62,8 @@ const MoveTable = ({learnedMethod, moveData, existing, version}) => {
                 <>
                 <table className='w-full max-h-full mix-blend-luminosity
                 text-center rounded-lg border-collapse'>
-                    <thead className={`${type && types[type].backgroundColor}
-                    text-white border-b-2 border-slate-300/50`}>
+                    <thead className={`${type && `${types[type].backgroundColor} text-white`}
+                    border-b-2 border-slate-300/50`}>
                         <tr>
                             <th>
                             {learnedMethod === 'level-up' ? 'Level' : '-'}

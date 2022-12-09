@@ -2,17 +2,19 @@ import React from 'react'
 
 import PokemonType from '../PokemonType';
 
+import { types } from '../../assets';
 import { useNavigate } from 'react-router-dom';
 import EvolutionArrow from './EvolutionArrow';
 import { usePokemon } from '../../features/hooks';
 import LoadedImage from '../LoadedImage';
 
-const Loading = <div className='bg-slate-400 animate-pulse w-full sm:w-[200px] h-[300px]'></div>
+import { usePokemonContext } from '../../features/pokemonContext';
 
-const Error = <div className='bg-rose-400 animate-pulse w-full sm:w-[200px] h-[300px]'></div>
+const Error = <div className='bg-rose-300 animate-pulse w-full sm:w-[200px] h-[300px] rounded-lg'></div>
 
 const Evolution = ({ evolution }) => {
     const navigate = useNavigate();
+    const { type } = usePokemonContext();
     const { id, name, details } = evolution;
     const {
         data,
@@ -21,6 +23,9 @@ const Evolution = ({ evolution }) => {
         isError,
         error
     } = usePokemon(id, ['pokemon', 'evolution']);
+
+    const Loading = <div className={`${type && types[type].backgroundColor} 
+    animate-pulse w-full sm:w-[200px] h-[300px] rounded-lg`}></div>
 
     return (
         <div className='flex lg:flex-row flex-col items-center justify-center'>

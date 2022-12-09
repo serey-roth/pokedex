@@ -22,7 +22,7 @@ const MovePool = ({ moves, currentGeneration, selectedGeneration, version }) => 
         <div className='flex flex-col gap-3 w-full items-center
         py-5'>
             <h1 className={`font-bold text-xl uppercase
-            ${type && types[type].backgroundColor} text-white
+            ${type && `${types[type].backgroundColor} text-white`}
             rounded-lg p-2`}>
                 Move Pool
             </h1> 
@@ -34,7 +34,7 @@ const MovePool = ({ moves, currentGeneration, selectedGeneration, version }) => 
                     transition-colors 
                     ${!existing && 'pointer-events-none'} 
                     ${learned === method && 
-                    type && types[type].backgroundColor} transition-colors`}
+                    type && types[type].backgroundColor}`}
                     onClick={(e) => setMethod(e.target.innerText.toLowerCase())}
                     >
                         {learned}
