@@ -1,22 +1,19 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
 
-import { useGetPokemonMoveQuery } from '../../redux/services/pokemonApi'
 import { types } from '../../assets';
 
 import { setSelectMove } from '../../redux/features/pokemonSlice';
 import { setMoveModal } from '../../redux/features/uiSlice';
 
 import PokemonType from '../PokemonType';
+import { useMove } from '../../features/hooks';
+import { usePokemonContext } from '../../features/pokemonContext';
 
-const MoveRow = ({ level, name, setIsFetching}) => {
-    const dispatch = useDispatch();
-    const type = useSelector(state => state.pokemon.type);
-    const { data, isFetching, error } = useGetPokemonMoveQuery(name);
+const MoveRow = ({ level, name }) => {
+    const { type } = usePokemonContext();
+    const { data, isFetching, error } = useMove(name)
 
     const handleClick = () => {
-        dispatch(setSelectMove(name));
-        dispatch(setMoveModal(true))
     }
 
     return (
