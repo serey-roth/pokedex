@@ -3,22 +3,29 @@ import { useState, useContext, createContext } from "react";
 const PokemonContext = createContext({});
 
 export const PokemonContextProvider = ({ children }) => {
-    const [baseData, setBaseData] = useState({});
-    const [speciesData, setSpeciesData] = useState({});
     const [type, setType] = useState('');
+    const [selections, setSelections] = useState({
+        variety,
+        ability,
+        move,
+        version: 'red-blue',
+    })
 
-    const handleBaseDataChange = (data) => setBaseData(data);
-    const handleSpeciesDataChange = (data) => setSpeciesData(data);
     const handleTypeChange = (type) => setType(type);
+    
+    const handleSelectionsChange = (payload) => {
+        setSelections(prevSelections => ({
+            ...prevSelections,
+            [payload.name]: payload.value,
+        }))
+    }
 
     return (
         <PokemonContext.Provider value={{
-            baseData, 
-            speciesData,
             type,
-            handleBaseDataChange,
-            handleSpeciesDataChange,
+            selections,
             handleTypeChange,
+            handleSelectionsChange
         }}>
             {children}
         </PokemonContext.Provider>
