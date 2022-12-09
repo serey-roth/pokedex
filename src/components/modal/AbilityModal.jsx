@@ -9,21 +9,31 @@ import ModalPortal from './ModalPortal';
 
 const AbilityModal = () => {
     const {
-        type, 
-        version, 
-        selectAbility: ability
+        type,
+        selections,
+        handleSelectionsChange,
     } = usePokemonContext();
-    const { data, isFetching, error } = useAbility(ability);
 
-    const effectObj = data?.effect_entries?.find(entry => 
+    const {
+        data,
+        isLoading,
+        isFetching,
+        isError,
+        error
+    } = useAbility(selections.ability);
+
+    const effectObj = data?.effect_entries?.find(entry =>
         entry?.language?.name === 'en');
 
-    const textObj = data?.flavor_text_entries?.find(entry => 
-        entry?.language?.name === 'en' && 
+    const textObj = data?.flavor_text_entries?.find(entry =>
+        entry?.language?.name === 'en' &&
         entry?.version_group?.name === version);
 
     const handleClose = () => {
-        dispatch(setAbilityModal(false));
+        handleSelectionsChange({
+            name: 'ability',
+            value: undefined,
+        })
     }
 
     useEffect(() => {
@@ -34,7 +44,7 @@ const AbilityModal = () => {
         }
     }, [handleClose]);
 
-    if (!visible) return null;
+    if (!selections.ability) return null;
 
     return (
         <ModalPortal wrapperId='modal-portal'>
@@ -43,16 +53,27 @@ const AbilityModal = () => {
             mix-blend-luminosity flex animate-slideup
             border border-slate-500/40 rounded-lg bg-white
             flex-col items-center gap-3 p-5'>
-                <h1 className={`font-bold text-xl uppercase
-                ${type && types[type].textColor}`}>
-                {ability?.replace(/\-/g, ' ')}</h1>
-                <Info 
-                description={textObj?.flavor_text} 
-                effect={effectObj?.effect}
-                shortEffect={effectObj?.short_effect} />
-                <button className={`font-bold uppercase py-1 px-2 rounded-lg
-                ${type && types[type].backgroundColor} text-white`}
-                onClick={handleClose}>close</button>
+                {(isLoading || isFetching) ? (
+                    <p>Loading...</p>
+                ): (isError && error) ? (
+                    <p>Error occurred when fetching data!</p>
+                ) :
+                (
+                <>
+                    <h1 className={`font-bold text-xl uppercase
+                    ${type && types[type].textColor}`}>
+                        {ability?.replace(/\-/g, ' ')}</h1>
+
+                    <Info
+                        description={textObj?.flavor_text}
+                        effect={effectObj?.effect}
+                        shortEffect={effectObj?.short_effect} />
+
+                    <button className={`font-bold uppercase py-1 px-2 rounded-lg
+                    ${type && types[type].backgroundColor} text-white`}
+                        onClick={handleClose}>close</button>
+                </>
+                )}
             </div>
         </ModalPortal>
     )
