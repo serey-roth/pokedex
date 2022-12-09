@@ -82,7 +82,7 @@ const Pokedex = () => {
                 {visibleData?.map(entry => {
                     const speciesId = Number(entry.pokemon_species.url.match(/\d+\/$/g)[0].replace(/\//g, ''));
                     return (
-                    <PokemonCard key={entry.entry_number} query={speciesId} />
+                    <PokemonCard key={entry.entry_number} id={speciesId} />
                     )
                 })}
             </div>
