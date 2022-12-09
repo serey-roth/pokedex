@@ -4,16 +4,25 @@ import { types } from '../../assets';
 
 import Evolution from './Evolution';
 import { useEvolutions } from '../../features/hooks';
+import { usePokemonContext } from '../../features/pokemonContext';
+
+const Loading = <div className='bg-slate-400 animate-pulse w-full h-[300px]'></div>
+
+const Error = <div className='bg-rose-400 animate-pulse w-full h-[300px]'></div>
 
 const EvolutionChain = ({ species }) => {
+    const { type } = usePokemonContext();
     const { 
         data: evolutions, 
         isFetching,
         isLoading,
+        isError,
+        error
     } = useEvolutions(species.evolution_chain?.url?.match(/\/(\d+)\//g)[0]
     .replace(/\//g, ''));
 
-    if (isLoading && isFetching) return <p>Loading...</p>
+    if (isLoading || isFetching) return Loading;
+    if (isError && error) return Error;
 
     const chain = getEvolutionChain(evolutions);
 
@@ -29,7 +38,7 @@ const EvolutionChain = ({ species }) => {
     return (
         <div className='flex flex-col w-full lg:items-center py-5 gap-5'>
             <h1 className={`font-bold text-xl uppercase w-fit self-center
-            rounded-lg p-2`}>
+            rounded-lg p-2 ${type && `${types[type].backgroundColor} text-white`}`}>
                 Evolution Chain
             </h1> 
             {chain?.length === 1 ? (
