@@ -86,7 +86,7 @@ const BaseInfo = () => {
                 <p className='text-center font-semibold text-black
                 w-[70px]'>Forms</p>
                 <span className='flex flex-wrap gap-2 flex-1'>
-                {species && species.varieties.map(variety => {
+                {species && species.varieties?.map(variety => {
                     let name;
                     if (variety.isDefault) {
                         name = variety.pokemon.name;
