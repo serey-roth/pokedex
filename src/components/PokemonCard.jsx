@@ -26,11 +26,11 @@ const PokemonCard = ({ query }) => {
     if (!data?.is_default) return null;
 
     return (
-        <div className='flex flex-col h-fit p-2 border-[0.5px] relative'>
+        <div className='flex flex-col p-2 border-[0.5px] relative'>
             {(isLoading || isFetching || (isError && error)) ? (
                 <>
-                    <span className='w-[80] h-[80] bg-slate-50 animate-pulse' />
-                    <span className='w-full h-[10] bg-slate-50 animate-pulse' />
+                    <span className='w-full h-[80px] bg-slate-50 animate-pulse'></span>
+                    <span className='w-full h-[10px] bg-slate-50 animate-pulse'></span>
                 </>
             ) : (
                 <>
