@@ -7,6 +7,7 @@ import Info from './Info';
 import ModalPortal from './ModalPortal';
 
 import { usePokemonContext } from '../../features/pokemonContext';
+import { useMove } from '../../features/hooks';
 
 const MoveModal = () => {
     const {
@@ -15,19 +16,19 @@ const MoveModal = () => {
         handleSelectionsChange
     } = usePokemonContext();
 
-    const { data, isFetching, isLoading, isError, error } = useMove(move);
+    const { data, isFetching, isLoading, isError, error } = useMove(selections.move);
 
     const effectObj = data?.effect_entries?.find(entry => 
         entry?.language?.name === 'en');
 
     const textObj = data?.flavor_text_entries?.find(entry => 
         entry?.language?.name === 'en' && 
-        entry?.version_group?.name === version);
+        entry?.version_group?.name === selections.version);
 
     const handleClose = () => {
         handleSelectionsChange({
             name: 'move',
-            value: undefined,
+            value: '',
         })
     }
 
@@ -42,8 +43,6 @@ const MoveModal = () => {
         }
     }, [handleClose]);
 
-    if (!selections.move) return null;
-
     return (
         <ModalPortal wrapperId='modal-portal'>
             <div className='fixed lg:inset-x-1/4 lg:inset-y-[10%] z-50 
@@ -56,7 +55,7 @@ const MoveModal = () => {
                 : (<>
                     <h1 className={`font-bold text-xl uppercase
                     ${type && types[type].textColor}`}>
-                    {move?.replace(/\-/g, ' ')}</h1>
+                    {selections.move?.replace(/\-/g, ' ')}</h1>
 
                     <MoveStats 
                     power={data?.power}

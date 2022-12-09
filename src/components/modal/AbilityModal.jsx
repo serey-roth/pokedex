@@ -27,12 +27,12 @@ const AbilityModal = () => {
 
     const textObj = data?.flavor_text_entries?.find(entry =>
         entry?.language?.name === 'en' &&
-        entry?.version_group?.name === version);
+        entry?.version_group?.name === selections.version);
 
     const handleClose = () => {
         handleSelectionsChange({
             name: 'ability',
-            value: undefined,
+            value: '',
         })
     }
 
@@ -42,9 +42,7 @@ const AbilityModal = () => {
         return () => {
             document.body.removeEventListener('keydown', closeOnEscapeKey);
         }
-    }, [handleClose]);
-
-    if (!selections.ability) return null;
+    }, [handleClose])
 
     return (
         <ModalPortal wrapperId='modal-portal'>
@@ -62,7 +60,7 @@ const AbilityModal = () => {
                 <>
                     <h1 className={`font-bold text-xl uppercase
                     ${type && types[type].textColor}`}>
-                        {ability?.replace(/\-/g, ' ')}</h1>
+                        {selections.ability?.replace(/\-/g, ' ')}</h1>
 
                     <Info
                         description={textObj?.flavor_text}
