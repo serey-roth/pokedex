@@ -5,15 +5,17 @@ import { types } from '../../assets';
 import MoveStats from './MoveStats';
 import Info from './Info';
 import ModalPortal from './ModalPortal';
+
 import { usePokemonContext } from '../../features/pokemonContext';
 
 const MoveModal = () => {
     const {
         type, 
-        version, 
-        selectMove: move, 
+        selections,
+        handleSelectionsChange
     } = usePokemonContext();
-    const { data, isFetching, error } = useMove(move);
+
+    const { data, isFetching, isLoading, isError, error } = useMove(move);
 
     const effectObj = data?.effect_entries?.find(entry => 
         entry?.language?.name === 'en');
@@ -23,7 +25,10 @@ const MoveModal = () => {
         entry?.version_group?.name === version);
 
     const handleClose = () => {
-        
+        handleSelectionsChange({
+            name: 'move',
+            value: undefined,
+        })
     }
 
     //when the user hits the escape key, we want to close the modal
@@ -37,7 +42,7 @@ const MoveModal = () => {
         }
     }, [handleClose]);
 
-    if (!visible) return null;
+    if (!selections.move) return null;
 
     return (
         <ModalPortal wrapperId='modal-portal'>
@@ -46,24 +51,31 @@ const MoveModal = () => {
             backdrop-blur-sm mix-blend-luminosity animate-slideup
             border border-slate-500/40 rounded-lg bg-white
             flex-col items-center gap-3 p-5'>
-                <h1 className={`font-bold text-xl uppercase
-                ${type && types[type].textColor}`}>
-                {move?.replace(/\-/g, ' ')}</h1>
-                <MoveStats 
-                power={data?.power}
-                pp={data?.pp}
-                accuracy={data?.accuracy}
-                priority={data?.priority}
-                contest={data?.contest_type?.name}
-                damage={data?.damage_class?.name}
-                type={data?.type?.name} />
-                <Info 
-                description={textObj?.flavor_text} 
-                effect={effectObj?.effect?.replace(/\$effect\_chance/g, `${data.effect_chance}`)}
-                shortEffect={effectObj?.short_effect?.replace(/\$effect\_chance/g, `${data.effect_chance}`)} />
-                <button className={`font-bold uppercase py-1 px-2 rounded-lg
-                ${type && types[type].backgroundColor} text-white`}
-                onClick={handleClose}>close</button>
+                {(isLoading || isFetching) ? (<p>Loading...</p>)
+                : (isError && error) ? (<p>Error occurred when fetching data!</p>)
+                : (<>
+                    <h1 className={`font-bold text-xl uppercase
+                    ${type && types[type].textColor}`}>
+                    {move?.replace(/\-/g, ' ')}</h1>
+
+                    <MoveStats 
+                    power={data?.power}
+                    pp={data?.pp}
+                    accuracy={data?.accuracy}
+                    priority={data?.priority}
+                    contest={data?.contest_type?.name}
+                    damage={data?.damage_class?.name}
+                    type={data?.type?.name} />
+
+                    <Info 
+                    description={textObj?.flavor_text} 
+                    effect={effectObj?.effect?.replace(/\$effect\_chance/g, `${data.effect_chance}`)}
+                    shortEffect={effectObj?.short_effect?.replace(/\$effect\_chance/g, `${data.effect_chance}`)} />
+                    
+                    <button className={`font-bold uppercase py-1 px-2 rounded-lg
+                    ${type && types[type].backgroundColor} text-white`}
+                    onClick={handleClose}>close</button>
+                </>)}
             </div>
         </ModalPortal>
     )
