@@ -26,6 +26,7 @@ import Loader from '../components/Loader'
 import Error from '../components/Error'
 import { usePokemon, useSpecies } from '../features/hooks'
 import LoadedImage from '../components/LoadedImage'
+import { usePokemonContext } from '../features/pokemonContext'
 
 const PokemonImage = React.lazy(() => import('../components/PokemonImage'));
 const Stats = React.lazy(() => import('../components/stats/Stats'));
@@ -68,6 +69,13 @@ const PokedexEntry = ({ version, text }) => (
 const Pokemon = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+
+    const { 
+        handleBaseDataChange, 
+        handleSpeciesDataChange, 
+        handleTypeChange 
+    } = usePokemonContext();
+
     const pokemonRef = useRef();
     
     const [variety, setVariety] = useState('');
@@ -108,6 +116,16 @@ const Pokemon = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (base) {
+            handleBaseDataChange(base);
+            handleTypeChange(base.types[0].type.name);
+        }
+    }, [base])
+
+    useEffect(() => {
+        if (species) handleSpeciesDataChange(species)
+    }, [species])
 
     const handleVersionChange = (e) => {
         setVersion(e.target.value);
@@ -123,7 +141,7 @@ const Pokemon = () => {
         import.meta.url).href;
     }
 
-    if (isFetchingBase || isFetchingSpecies || isLoadingBase || isFetchingSpecies) return (<Loader />);
+    if (isFetchingBase || isFetchingSpecies || isLoadingBase || isLoadingSpecies) return (<Loader />);
 
     if ((isErrorSpecies && errorSpecies) || (isErrorBase && errorBase)) return (<Error />)
 
@@ -167,14 +185,14 @@ const Pokemon = () => {
                         ))
                     }
                 </div>
-                {/* <div className='flex flex-col items-center
+                <div className='flex flex-col items-center
                 w-full px-5'>
                     <Info />
-                    <Typing />
+                   {/*  <Typing />
                     <Stats />
                     <EvolutionChain />
-                    <MovePool />
-                </div> */}
+                    <MovePool /> */}
+                </div> 
             </div> 
         </ErrorBoundary>
     )
