@@ -2,20 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FiChevronLeft } from 'react-icons/fi'
 import { ImSpinner } from 'react-icons/im'
-import { useGetPokemon } from '../features/useGetPokemon'
 
 import { types } from '../assets'
-
-import { 
-    setBase,
-    setSpecies, 
-    setType,
-    setGeneration,
-    setVariety,
-    setName
-} from '../redux/features/pokemonSlice'
-
-import { setAbilityModal, setMoveModal, updatePage } from '../redux/features/uiSlice'
 
 import Info from '../components/info/Info'
 import GameVersions from '../components/GameVersions'
@@ -70,7 +58,8 @@ const Pokemon = () => {
     const { 
         variety,
         version,
-        handleTypeChange 
+        handleTypeChange,
+        handleSelectionsChange,
     } = usePokemonContext();
 
     const pokemonRef = useRef();
@@ -114,7 +103,10 @@ const Pokemon = () => {
     }, [base])
 
     const handleVersionChange = (e) => {
-        setVersion(e.target.value);
+        handleSelectionsChange({
+            name: 'version',
+            value: e.target.value,
+        });
     }
 
     const handleReturn = () => {
