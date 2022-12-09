@@ -20,9 +20,11 @@ export const usePokemons = () => {
     }
 }
 
-export const usePokemon = (id) => {
+//each new request for the same pokemon must have a new query key
+//otherwise, it's going to run forever
+export const usePokemon = (id, queryKey=['pokemon']) => {
     return useQuery(
-        ['pokemon', id],
+        [...queryKey, id],
         () => pokemonApi.getPokemon(id),
         {
             keepPreviousData: true,
@@ -30,10 +32,10 @@ export const usePokemon = (id) => {
     )
 }
 
-export const useEvolutions = (speciesId) => {
+export const useEvolutions = (evolutionId) => {
     return useQuery(
-        ['evolutions', speciesId],
-        () => pokemonApi.getEvolutions(speciesId),
+        ['evolutions', evolutionId],
+        () => pokemonApi.getEvolutions(evolutionId),
         {
             keepPreviousData: true,
         }
