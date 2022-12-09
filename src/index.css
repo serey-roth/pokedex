@@ -126,7 +126,7 @@ thead th:nth-of-type(2) {
 }
 
 tbody tr:nth-of-type(2n) {
-  background-color: rgb(245, 245, 245, 0.8);
+  background-color: rgb(245, 245, 245, 0.5);
 }
 
 tbody tr:nth-of-type(2n + 1) {
