@@ -18,27 +18,6 @@ import MovePool from '../components/moves/MovePool'
 import EvolutionChain from '../components/evolutions/EvolutionChain'
 import Typing from '../components/Typing'
 
-const generations = {
-    'red-blue': 1,
-    'yellow': 1 ,
-    'gold-silver': 2 ,
-    'crystal': 2 ,
-    'ruby-sapphire': 3 ,
-    'emerald': 3 ,
-    'firered-leafgreen': 3 ,
-    'diamond-pearl': 4 ,
-    'platinum': 4 ,
-    'heartgold-soulsilver': 4 ,
-    'black-white': 5 ,
-    'black-2-white-2': 5 ,
-    'x-y': 6 ,
-    'omega-ruby-alpha-sapphire': 6 ,
-    'sun-moon': 7 ,
-    'ultra-sun-ultra-moon': 7 ,
-    'lets-go-pikachu-lets-go-eevee': 7 ,
-    'sword-shield': 8,
-}
-
 const PokedexEntry = ({ version, text }) => (
     <div className='flex flex-col gap-1 lg:w-[80%]'>
         <h2 className={`font-semibold uppercase text-center`}>
@@ -55,10 +34,8 @@ const Pokemon = () => {
     const { id } = useParams();
 
     const { 
-        variety,
-        version,
+        selections,
         handleTypeChange,
-        handleSelectionsChange,
     } = usePokemonContext();
 
     const pokemonRef = useRef();
@@ -101,13 +78,6 @@ const Pokemon = () => {
         }
     }, [base])
 
-    const handleVersionChange = (e) => {
-        handleSelectionsChange({
-            name: 'version',
-            value: e.target.value,
-        });
-    }
-
     const handleReturn = () => {
         navigate('/');
     }
@@ -117,8 +87,8 @@ const Pokemon = () => {
     if ((isErrorSpecies && errorSpecies) || (isErrorBase && errorBase) || (!base || !species)) return (<Error />)
 
     let image = base?.sprites?.other['official-artwork'].front_default;
-    if (base && /starter/g.test(base.name)) {
-        image = new URL(`../assets/artworks/${variety}.png`, 
+    if (base && selections.variety && /starter/g.test(base.name)) {
+        image = new URL(`../assets/artworks/${selections.variety}.png`, 
         import.meta.url).href;
     }
 
@@ -135,7 +105,7 @@ const Pokemon = () => {
                         className='font-bold text-xl cursor-pointer' 
                         onClick={handleReturn}/>
 
-                    <GameVersions version={version} onChange={handleVersionChange} />
+                    <GameVersions />
                 </div>
 
                 <div className='flex flex-col items-center w-full justify-center gap-1'>
@@ -173,8 +143,7 @@ const Pokemon = () => {
                     <EvolutionChain species={species}/>
                     <MovePool 
                     moves={base?.moves}
-                    selectedGeneration={generations[version]}
-                    currentGeneration={getGenerationNumber(species.generation.name.replace(/generation\-/g, ''))}
+                    pokemonGeneration={getGenerationNumber(species.generation.name.replace(/generation\-/g, ''))}
                     />
                 </div> 
             </div> 
