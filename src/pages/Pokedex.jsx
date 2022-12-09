@@ -62,22 +62,23 @@ const Pokedex = () => {
 
     return (
         <div className='w-full flex flex-col items-start relative min-h-screen'>
-            <div className='w-full flex flex-wrap items-center fixed z-10
-            justify-center bg-black text-white p-3 gap-3 lg:h-[75px]
-            h-fit'>
-                <PokedexRegions 
-                    region={region} 
-                    onChange={handleRegionChange} />
-                <h1 className='animate-slideleft
-                font-bold uppercase text-2xl'>
+            <div className='w-full flex flex-wrap items-center px-3 py-1
+            bg-black text-white'>
+                <h1 className='animate-slideleft font-bold uppercase text-2xl
+                flex-1'>
                     Pokedex
                 </h1>    
+                
                 <SearchBar 
                     search={search} 
                     onChange={handleSearchChange} />
             </div>
-            <div className='flex items-center justify-center mt-[4.5em]
-            flex-wrap w-full'>
+            
+            <PokedexRegions 
+                    region={region} 
+                    onChange={handleRegionChange} />
+
+            <div className='flex flex-wrap w-full'>
                 {visibleData.map(entry => (
                     <PokemonCard query={entry.entry_number} />
                 ))}
