@@ -29,7 +29,7 @@ const StatMode = ({ mode, active, setMode }) => {
     )
 }
 
-const Stats = ({ baseData: base }) => {
+const Stats = ({ base }) => {
     const [mode, setMode] = useState('base');
     const [stats, setStats] = useState(null);
     const [proportions, setProportions] = useState(null);
@@ -75,7 +75,7 @@ const Stats = ({ baseData: base }) => {
     return (
         <div className='flex flex-col flex-1 w-full py-5 gap-3 items-center'>
             <h1 className={`font-bold text-xl uppercase
-            ${type && types[type].backgroundColor} text-white
+            ${type && `${types[type].backgroundColor} text-white`}
             rounded-lg p-2`}>
                 Pokemon Stats
             </h1> 
@@ -112,7 +112,7 @@ const Stats = ({ baseData: base }) => {
                     <input type='range' min={1} max={100} value={level} 
                     onChange={(e) => setLevel(Number.parseInt(e.target.value))} 
                     className={`flex-1 mr-2 appearance-none rounded-lg h-2
-                    ${type && types[type].backgroundColor} cursor-pointer`} />
+                    ${type && `${types[type].backgroundColor} text-white cursor-pointer`}`} />
                 </div>
                 )}
                 <StatsProgress 
