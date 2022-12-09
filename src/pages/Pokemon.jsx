@@ -185,7 +185,7 @@ const Pokemon = () => {
 
                 <div className='flex flex-col items-center
                 w-full px-5'>
-                    <Info />
+                    <Info base={base} species={species} />
                     <Typing pokemonTypes={base?.types}/>
                     <Stats baseData={base}/>
                     <EvolutionChain species={species}/>
