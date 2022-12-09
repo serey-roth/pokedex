@@ -1,43 +1,34 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-
-import { useGetPokemonEvolutionsQuery } from '../../redux/services/pokemonApi'
 
 import { types } from '../../assets';
 
 import Evolution from './Evolution';
+import { useEvolutions } from '../../features/hooks';
 
-const EvolutionChain = () => {
-    const [id, setId] = useState(null);
-    const [chain, setChain] = useState(null);
-    const species = useSelector(state => state.pokemon.species);
-    const type = useSelector(state => state.pokemon.type);
-
+const EvolutionChain = ({ species }) => {
     const { 
         data: evolutions, 
-    } = useGetPokemonEvolutionsQuery(id ? id : null);
+        isFetching,
+        isLoading,
+    } = useEvolutions(species.evolution_chain?.url?.match(/\/(\d+)\//g)[0]
+    .replace(/\//g, ''));
 
-    useEffect(() => {
-        if (species) {
-            //get the evolution id that is used for all pokemons in the chain
-            //different from the id of the pokemon
-            const eid = species.evolution_chain?.url?.match(/\/(\d+)\//g)[0]
-            .replace(/\//g, '');
-            setId(eid);
-        }
-    }, [species]);
+    if (isLoading && isFetching) return <p>Loading...</p>
 
-    useEffect(() => {
-        if (evolutions?.chain) {
-            setChain(getEvolutionChain(evolutions));
-        }
-    }, [evolutions])
+    const chain = getEvolutionChain(evolutions);
+
+    const children = chain?.map((link, index) => (
+        <div key={`link-${index}`}
+        className='flex flex-row lg:flex-col overflow-auto py-2'>
+            {link.map(item => (
+                <Evolution key={item.name} evolution={item} />
+            ))}
+        </div>
+    ))
 
     return (
-        <div className='flex flex-col w-full
-        lg:items-center py-5 gap-5'>
+        <div className='flex flex-col w-full lg:items-center py-5 gap-5'>
             <h1 className={`font-bold text-xl uppercase w-fit self-center
-            ${type && types[type].backgroundColor} text-white
             rounded-lg p-2`}>
                 Evolution Chain
             </h1> 
@@ -46,17 +37,8 @@ const EvolutionChain = () => {
                 font-semibold text-lg'>This pokemon does not evolve.</p>
             ) : (
                 <div className='flex flex-1 lg:flex-row lg:flex-wrap
-                flex-col w-full gap-5 justify-center items-center
-                lg:h-[200px]'>
-                    {chain?.map((link, index )=> (
-                        <div key={`link-${index}`}
-                        className='flex flex-row lg:flex-col
-                        lg:max-h-[300px] max-w-[90%] overflow-auto py-2'>
-                            {link.map(item => (
-                                <Evolution key={item.name} evolution={item} />
-                            ))}
-                        </div>
-                    ))}
+                flex-col w-full gap-5 justify-center items-center'>
+                {children}
                 </div>
             )}
         </div>
