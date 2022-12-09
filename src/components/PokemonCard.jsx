@@ -8,6 +8,7 @@ import PokemonType from './PokemonType';
 import ImagePlaceHolder from './ImagePlaceHolder';
 
 import { usePokemon } from '../features/hooks';
+import LoadedImage from './LoadedImage';
 
 //for lazy loading image
 const PokemonImage = React.lazy(() => import('./PokemonImage'))
@@ -54,19 +55,13 @@ const PokemonCard = ({ query }) => {
             absolute top-1`}>
                 {data?.id}
             </h3>
-            <React.Suspense 
-            fallback={
-                <div className='sm:w-[200px] flex flex-col self-center 
-                h-[300px] sm:h-[180px]'>
-                    <ImagePlaceHolder />
-                </div>
-            }>
-                <div className='sm:w-[200px] flex flex-col self-center 
-                h-[300px] sm:h-[180px] sm:scale-[80%]'>
-                    <PokemonImage 
-                    src={data?.sprites?.other['official-artwork'].front_default} />
-                </div>
-             </React.Suspense>
+
+            <LoadedImage 
+                width={100} 
+                height={100} 
+                name={data?.name}
+                src={data?.sprites?.other['official-artwork'].front_default} />
+    
             <h1 className={`text-center flex-1 capitalize font-bold text-xl
             cursor-pointer hover:text-black transition-colors
             ${data && types[data.types[0].type.name].textColor}`}
