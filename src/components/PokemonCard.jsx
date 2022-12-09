@@ -6,7 +6,7 @@ import { types } from '../assets';
 import { usePokemon } from '../features/hooks';
 import LoadedImage from './LoadedImage';
 
-const PokemonCard = ({ query }) => {
+const PokemonCard = ({ id }) => {
     const navigate = useNavigate();
 
     const { 
@@ -15,8 +15,8 @@ const PokemonCard = ({ query }) => {
         isLoading,
         error,
         isError
-    } = usePokemon(query);
-
+    } = usePokemon(id);
+    
     const handleClick = (pokemon) => {
         if (pokemon) {
             navigate(`/pokemon/${pokemon}`);
@@ -50,7 +50,7 @@ const PokemonCard = ({ query }) => {
                             className={`flex-1 capitalize text-sm truncate
                             cursor-pointer text-right ${data && 
                             types[data.types[0].type.name].textColor}`}
-                            onClick={() => handleClick(data?.name)}
+                            onClick={() => handleClick(id)}
                         >
                             {data?.name?.replace(/\-[a-z]{3,}$/g, '')}
                         </h1>
