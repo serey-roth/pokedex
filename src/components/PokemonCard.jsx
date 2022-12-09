@@ -1,10 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ImSpinner } from 'react-icons/im'
 
 import { types } from '../assets';
-import PokemonPlaceHolder from './PokemonPlaceHolder';
-import PokemonType from './PokemonType';
 
 import { usePokemon } from '../features/hooks';
 import LoadedImage from './LoadedImage';
