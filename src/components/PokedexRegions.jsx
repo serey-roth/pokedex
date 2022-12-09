@@ -10,9 +10,7 @@ const regions = ['national', 'kanto',
 
 const PokedexRegions = ({ region, onChange }) => {
     return (
-        <select className={`text-black font-semibold
-        text-sm text-center p-2 appearance-none cursor-pointer
-        rounded-lg capitalize outline-none`}
+        <select className='text-white bg-black p-2 capitalize'
         value={region} onChange={ onChange }>
             {regions.map(region => (
                 <option
