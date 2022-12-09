@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createRef } from 'react'
+import React, { useState, useEffect, createRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Loader from '../components/Loader';
@@ -7,79 +7,76 @@ import PokemonCard from '../components/PokemonCard';
 import SearchBar from '../components/SearchBar';
 import PokedexRegions from '../components/PokedexRegions';
 
-import { useGetPokedexQuery, useGetPokemonsQuery } from '../redux/services/pokemonApi';
-import { updatePokedex } from '../redux/features/pokedexSlice';
+import { usePokedex } from '../features/hooks'
 
+const ITEMS_PER_PAGE = 50;
 
-const Pokedex = ({ pageNum, setPageNum }) => {
-    const dispatch = useDispatch();
-
-    //the pokemons that have been displayed so far based on the scroll position
-    const [namesSoFar, updateNamesSoFar] = useState([]);
-    //the search input
+const Pokedex = () => {
+    const [page, setPage] = useState(1);
+    const [region, setRegion] = useState('national');
     const [search, updateSearch] = useState('');
-    //the results from the search
-    const [searchResults, updateSearchResults] = useState(null);
-    const [activeRegionSelect, setActiveRegionSelect] = useState(true);
 
-    //the list of all pokemon names
-    const { list: pokedex, region } = useSelector(state => state.pokedex);
+    const { 
+        data,
+        isLoading,
+        isError, 
+        error,
+        isFetching,
+        isPreviousData,
+    } = usePokedex(region);
 
-    const { data, isFetching, error} = useGetPokedexQuery(region);
+    const handleRegionChange = (e) => {
+        setRegion(e.target.value.replace(/\'/g, '').replace(/\s/g, ''));
+    }
 
-    useEffect(() => {
+    const handleSearchChange = (e) => {
+        if (/^[a-z\-]*$/gi.test(e.target.value)) {
+            updateSearch(e.target.value.toLowerCase())
+        }
+    }
+
+    const visibleData = useMemo(() => {
+        if (isPreviousData) return;
+
         if (data) {
-            const entries = data.pokemon_entries?.map(entry =>
-                entry.pokemon_species?.name);
-            dispatch(updatePokedex(entries));
+            let pokemons = data.pokemon_entries;
+
+            if (search) {
+                pokemons = pokemons.filter(pokemon => 
+                pokemon.pokemon_species.name.includes(search.toLowerCase()));
+            }
+
+            return pokemons.slice((page - 1) * ITEMS_PER_PAGE, ITEMS_PER_PAGE);
+        } else {
+            return [];
         }
-    }, [data]);
+    }, [page, data, isPreviousData, search]);
 
-    useEffect(() => {
-        //the numbers displayed depends on the page number which depends
-        //on how far the user has scrolled down the page
-        const count = 15 + 5 * pageNum;
-        //if there is a search, then show the search results based on the 
-        //given count; otherwise, show the pokedex based on the count
-        if (searchResults) updateNamesSoFar(searchResults.slice(0, count));
-        else updateNamesSoFar(pokedex.slice(0, count));
-    }, [pageNum, searchResults, pokedex]);
+    if (isLoading || isFetching) return (<Loader />)
 
-    useEffect(() => {
-        if (search && pokedex.length > 0) {
-            const results = pokedex.filter(name => name.includes(search));
-            updateSearchResults(results);
-            setActiveRegionSelect(false)
-        }
-        if (!search) {
-            updateSearchResults(null);
-            setActiveRegionSelect(true);
-        }
-        setPageNum(0);
-        //scroll to top of the pokedex for every new search or no search
-        window.scrollTo(0, 0);
-    }, [search]);
-
-    if (isFetching) return (<Loader />)
-
-    if (error) return (<Error />);
+    if (isError && error) return (<Error />);
 
     return (
         <div className='w-full flex flex-col items-start relative min-h-screen'>
             <div className='w-full flex flex-wrap items-center fixed z-10
             justify-center bg-black text-white p-3 gap-3 lg:h-[75px]
             h-fit'>
-                <PokedexRegions active={activeRegionSelect} />
+                <PokedexRegions 
+                    region={region} 
+                    onChange={handleRegionChange} />
                 <h1 className='animate-slideleft
                 font-bold uppercase text-2xl'>
                     Pokedex
                 </h1>    
-                <SearchBar search={search} updateSearch={updateSearch} />
+                <SearchBar 
+                    search={search} 
+                    onChange={handleSearchChange} />
             </div>
             <div className='flex items-center justify-center mt-[4.5em]
             flex-wrap w-full'>
-                {namesSoFar.map(name => 
-                (<PokemonCard key={`pokemon-${name}`} query={name} />))}
+                {visibleData.map(entry => (
+                    <PokemonCard query={entry.entry_number} />
+                ))}
             </div>
         </div>
     )
