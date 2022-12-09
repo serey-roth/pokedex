@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import { FiChevronLeft } from 'react-icons/fi'
 import { ImSpinner } from 'react-icons/im'
 import { useGetPokemon } from '../features/useGetPokemon'
@@ -18,7 +17,6 @@ import {
 
 import { setAbilityModal, setMoveModal, updatePage } from '../redux/features/uiSlice'
 
-import ImagePlaceHolder from '../components/ImagePlaceHolder'
 import Info from '../components/info/Info'
 import GameVersions from '../components/GameVersions'
 import ErrorBoundary from '../components/ErrorBoundary'
@@ -28,11 +26,10 @@ import { usePokemon, useSpecies } from '../features/hooks'
 import LoadedImage from '../components/LoadedImage'
 import { usePokemonContext } from '../features/pokemonContext'
 
-const PokemonImage = React.lazy(() => import('../components/PokemonImage'));
-const Stats = React.lazy(() => import('../components/stats/Stats'));
-const MovePool = React.lazy(() => import('../components/moves/MovePool'));
-const EvolutionChain = React.lazy(() => import('../components/evolutions/EvolutionChain'));
-const Typing = React.lazy(() => import('../components/Typing'));
+import Stats from '../components/stats/Stats'
+import MovePool from '../components/moves/MovePool'
+import EvolutionChain from '../components/evolutions/EvolutionChain'
+import Typing from '../components/Typing'
 
 const generations = {
     'red-blue': 1,
@@ -143,7 +140,7 @@ const Pokemon = () => {
 
     if (isFetchingBase || isFetchingSpecies || isLoadingBase || isLoadingSpecies) return (<Loader />);
 
-    if ((isErrorSpecies && errorSpecies) || (isErrorBase && errorBase)) return (<Error />)
+    if ((isErrorSpecies && errorSpecies) || (isErrorBase && errorBase) || (!base || !species)) return (<Error />)
 
     return (
         <ErrorBoundary>
@@ -185,13 +182,19 @@ const Pokemon = () => {
                         ))
                     }
                 </div>
+
                 <div className='flex flex-col items-center
                 w-full px-5'>
                     <Info />
-                   {/*  <Typing />
-                    <Stats />
-                    <EvolutionChain />
-                    <MovePool /> */}
+                    <Typing pokemonTypes={base?.types}/>
+                    <Stats baseData={base}/>
+                    <EvolutionChain species={species}/>
+                    <MovePool 
+                    moves={base?.moves} 
+                    version={version}
+                    selectedGeneration={generations[version]}
+                    currentGeneration={getGenerationNumber(species.generation.name.replace(/generation\-/g, ''))}
+                    />
                 </div> 
             </div> 
         </ErrorBoundary>
@@ -215,6 +218,19 @@ const getVersions = (version) => {
         default: {
             return version.split('-');
         }
+    }
+}
+
+const getGenerationNumber = (generation) => {
+    switch(generation) {
+        case 'i': { return 1 }
+        case 'ii': { return 2 }
+        case 'iii': { return 3 }
+        case 'iv': { return 4 }
+        case 'v': { return 5 }
+        case 'vi': { return 6 }
+        case 'vii': { return 7 }
+        case 'viii': { return 8 }
     }
 }
 
