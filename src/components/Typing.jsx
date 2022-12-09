@@ -1,9 +1,10 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { useGetTypingsQuery } from '../redux/services/pokemonApi'
+
 import PokemonType from './PokemonType'
 
 import { types } from '../assets';
+import { usePokemonContext } from '../features/pokemonContext';
+import { useType } from '../features/hooks';
 
 const Relation = ({mainType, effect, relation}) => (
     <div className='flex flex-col gap-1'>
@@ -21,7 +22,7 @@ const Relation = ({mainType, effect, relation}) => (
 )
 
 const DamageRelations = ({ type }) => {
-    const { data } = useGetTypingsQuery(type);
+    const { data } = useType(type);
 
     return (
         <>
@@ -52,9 +53,7 @@ const DamageRelations = ({ type }) => {
     )
 }
 
-const Typing = () => {
-    const base = useSelector(state => state.pokemon.base);
-
+const Typing = ({ pokemonTypes }) => {
     return (
         <div className='w-full flex flex-col items-center justify-center gap-1'>
             <h2 className='font-semibold text-lg w-full text-center'>Type Defenses</h2>
@@ -62,7 +61,7 @@ const Typing = () => {
                 *effectiveness of types on this pokemon based on types
                 </p>
             <div className='flex lg:flex-row flex-col gap-3 flex-wrap'>  
-            {base?.types?.map(typeObj => (
+            {pokemonTypes?.map(typeObj => (
                 <DamageRelations key={typeObj.type?.name} 
                 type={typeObj.type?.name} />
             ))}
