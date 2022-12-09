@@ -26,47 +26,16 @@ const versions = {
     'sword/shield': 'sword-shield',
 }
 
-const generations = {
-    'red-blue': 1,
-    'yellow': 1 ,
-    'gold-silver': 2 ,
-    'crystal': 2 ,
-    'ruby-sapphire': 3 ,
-    'emerald': 3 ,
-    'firered-leafgreen': 3 ,
-    'diamond-pearl': 4 ,
-    'platinum': 4 ,
-    'heartgold-soulsilver': 4 ,
-    'black-white': 5 ,
-    'black-2-white-2': 5 ,
-    'x-y': 6 ,
-    'omega-ruby-alpha-sapphire': 6 ,
-    'sun-moon': 7 ,
-    'ultra-sun-ultra-moon': 7 ,
-    'lets-go-pikachu-lets-go-eevee': 7 ,
-    'sword-shield': 8,
-}
-
-const GameVersions = () => {
-    const dispatch = useDispatch();
-    const type = useSelector(state => state.pokemon.type);
-    const gameVersion = useSelector(state => state.pokemon.version);
-    
-    const setGameVersion = (e) => {
-        dispatch(setVersion(e.target.value));
-        dispatch(setSelectGeneration(generations[e.target.value]))
-    }
-
+const GameVersions = ({ version, onChange }) => {
     return (
         <select className={`rounded-lg p-2 uppercase bg-white bg-opacity-80
-        font-bold ${type && types[type].textColor}
-        outline-none border-2`}
-        value={gameVersion}
-        onChange={setGameVersion}>
-        {Object.keys(versions).map(version => (
-            <option key={`version-${version}`}
-            value={versions[version]} className='text-center'>
-                {version.replace(/\-/g, ' ')}
+        font-bold outline-none border-2`}
+        value={version}
+        onChange={onChange}>
+        {Object.keys(versions).map(gameVersion => (
+            <option key={`version-${gameVersion}`}
+            value={versions[gameVersion]} className='text-center'>
+                {gameVersion.replace(/\-/g, ' ')}
             </option>
         ))}
         </select>
