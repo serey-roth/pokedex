@@ -1,4 +1,4 @@
-import React, { useEffect, createRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { FiChevronLeft } from 'react-icons/fi'
@@ -24,12 +24,34 @@ import GameVersions from '../components/GameVersions'
 import ErrorBoundary from '../components/ErrorBoundary'
 import Loader from '../components/Loader'
 import Error from '../components/Error'
+import { usePokemon, useSpecies } from '../features/hooks'
 
 const PokemonImage = React.lazy(() => import('../components/PokemonImage'));
 const Stats = React.lazy(() => import('../components/stats/Stats'));
 const MovePool = React.lazy(() => import('../components/moves/MovePool'));
 const EvolutionChain = React.lazy(() => import('../components/evolutions/EvolutionChain'));
 const Typing = React.lazy(() => import('../components/Typing'));
+
+const generations = {
+    'red-blue': 1,
+    'yellow': 1 ,
+    'gold-silver': 2 ,
+    'crystal': 2 ,
+    'ruby-sapphire': 3 ,
+    'emerald': 3 ,
+    'firered-leafgreen': 3 ,
+    'diamond-pearl': 4 ,
+    'platinum': 4 ,
+    'heartgold-soulsilver': 4 ,
+    'black-white': 5 ,
+    'black-2-white-2': 5 ,
+    'x-y': 6 ,
+    'omega-ruby-alpha-sapphire': 6 ,
+    'sun-moon': 7 ,
+    'ultra-sun-ultra-moon': 7 ,
+    'lets-go-pikachu-lets-go-eevee': 7 ,
+    'sword-shield': 8,
+}
 
 const PokedexEntry = ({version, text, type}) => (
     <div className='flex flex-col gap-1 lg:w-[80%]'>
@@ -44,22 +66,36 @@ const PokedexEntry = ({version, text, type}) => (
 )
 
 const Pokemon = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { query } = useParams();
-    const { type, version, species: storedSpecies, variety } = useSelector(state => state.pokemon);
-    const { base, species, isFetchingBase, 
-        isFetchingSpecies, errorBase, errorSpecies } = useGetPokemon(variety ? variety : query)
-    const pokemonRef = createRef();
+    const { id } = useParams();
+    const pokemonRef = useRef();
+    
+    const [variety, setVariety] = useState('');
+    const [version, setVersion] = useState('red-blue');
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [variety]); 
+    const [moveModal, setMoveModal] = useState(false);
+    const [abilityModal, setabilityModal] = useState(false);
+
+    const { 
+        data: base,
+        isLoading: isLoadingBase,
+        isFetching: isFetchingBase,
+        isError: isErrorBase, 
+        error: errorBase
+    } = usePokemon(id);
+
+    const { 
+        data: species,
+        isLoading: isLoadingSpecies,
+        isFetching: isFetchingSpecies,
+        isError: isErrorSpecies, 
+        error: errorSpecies
+    } = useSpecies(id);
 
     useEffect(() => {
         const handleClick = () => {
-            dispatch(setAbilityModal(false));
-            dispatch(setMoveModal(false));
+            setAbilityModal(false);
+            setMoveModal(false);
         }
         //when the user clicks on the pokemon page, closes all the modals
         if (pokemonRef.current) {
@@ -70,112 +106,72 @@ const Pokemon = () => {
                 pokemonRef.current.removeEventListener('click');
             }                                                                                                                                                     
         }
-    }, [dispatch]);
+    }, []);
 
-    useEffect(() => {
-        if (base) {
-            const type = base.types[0].type.name;
-            dispatch(setType(type));
-            dispatch(setBase(base));
-        }
-    }, [dispatch, base]);
-    
-    useEffect(() => {
-        if (species) {
-            dispatch(setName(species.name))
-            dispatch(setSpecies(species));
-            dispatch(setGeneration(species?.generation?.name?.replace(/generation\-/g, '')));
-            
-        }
-    }, [dispatch, species]);
+
+    const handleVersionChange = (e) => {
+        setVersion(e.target.value);
+    }
 
     const handleReturn = () => {
-        dispatch(updatePage('pokedex'));
-        dispatch(setVariety(null));
         navigate('/');
     }
 
-    const name = base?.name?.replace(
-        new RegExp(`${storedSpecies?.name}\-(\[a\-z\-\]+)`,
-        'g'), `${storedSpecies?.name} [ $1 ]`)
-        .replace(/\-/g, ' ')
-        .replace(/gmax/g, 'gigantamax');
-
     let image = base?.sprites?.other['official-artwork'].front_default;
-    if (/starter/g.test(name)) {
+    if (base && /starter/g.test(base.name)) {
         image = new URL(`../assets/artworks/${variety}.png`, 
         import.meta.url).href;
     }
 
-    if (isFetchingBase || isFetchingSpecies) return (<Loader />);
+    if (isFetchingBase || isFetchingSpecies || isLoadingBase || isFetchingSpecies) return (<Loader />);
 
-    if (errorBase) return (<Error />)
+    if ((isErrorSpecies && errorSpecies) || (isErrorBase && errorBase)) return (<Error />)
 
     return (
         <ErrorBoundary>
             <div className='w-screen min-h-screen flex flex-col items-center 
             gap-10 animate-slidedown relative' ref={pokemonRef}>
                 <div className={`fixed w-screen z-10 flex items-center flex-wrap
-                p-3 ${type && types[type].backgroundColor}
-                text-black gap-3 justify-center`}>
+                p-3 text-black gap-3 justify-center`}>
                     <FiChevronLeft className='font-bold text-xl cursor-pointer' 
                     onClick={handleReturn}/>
                     <h1 className='font-bold uppercase text-2xl'>
                         Pokedex
                     </h1>
-                    <GameVersions />
+                    <GameVersions version={version} onChange={handleVersionChange} />
                 </div>
                 <div className='flex flex-col items-center 
                 w-full justify-center gap-1 lg:mt-10 mt-20'>
-                    <React.Suspense fallback={
-                        <div className='w-[50%] lg:w-[420px] lg:h-[420px] 
-                        flex items-center justify-center self-center mt-10'>
-                            <ImagePlaceHolder />
-                        </div>
-                    }>
-                        <div className='w-[50%] scale-[98%] lg:w-[420px] lg:h-[420px] 
-                        flex items-center justify-center self-center mt-10'>
-                            <PokemonImage 
-                            src={image} />
-                        </div>
-                    </React.Suspense>
                     <span className={`flex flex-col items-center
-                    font-bold text-2xl uppercase
-                    ${type && types[type].textColor}`}>
-                        <p>{name}</p>
+                    font-bold text-2xl uppercase`}>
+                        <p>{species?.name}</p>
                     </span>
                     <p className={`font-semibold text-lg cursor-pointer
-                    ${type && types[type].backgroundColor}
-                    text-white rounded-lg p-2`}
-                    onClick={() => dispatch(setSelectGenera(
-                    storedSpecies?.genera[7]?.genus))}>
-                        {storedSpecies?.genera[7]?.genus}
+                    text-white rounded-lg p-2`}>
+                        {species?.genera[7]?.genus}
                     </p>
                 </div>
                 <div className='flex flex-col px-5 items-center gap-3 w-full'>
-                    <h1 className={`font-bold text-xl uppercase 
-                    ${type && types[type].backgroundColor} text-white
+                    <h1 className={`font-bold text-xl uppercase text-white
                     rounded-lg p-2`}>
                         Pokedex Entries
                     </h1>
-                    {getPokedexEntries(getVersions(version), storedSpecies).map(entry => (
+{/*                     {{getPokedexEntries(getVersions(version), storedSpecies).map(entry => (
                     <PokedexEntry 
                     key={entry.version} 
                     version={entry.version}
                     type={type}
-                    text={entry.text} />
-                    ))}
+                    text={entry.text} />}
+                    ))} */}
                 </div>
-                <div className='flex flex-col items-center
+                {/* <div className='flex flex-col items-center
                 w-full px-5'>
                     <Info />
-                    <React.Suspense fallback={<ImSpinner />}>
-                        <Typing />
-                        <Stats />
-                        <EvolutionChain />
-                        <MovePool />
-                    </React.Suspense>
-                </div>
+                    <Typing />
+                    <Stats />
+                    <EvolutionChain />
+                    <MovePool />
+                </div> */}
             </div> 
         </ErrorBoundary>
     )
