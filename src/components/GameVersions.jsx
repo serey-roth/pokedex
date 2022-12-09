@@ -37,7 +37,7 @@ const GameVersions = () => {
         <select className={`rounded-lg p-2 uppercase bg-white bg-opacity-80
         font-bold outline-none border-2`}
         value={selections.version}
-        onChange={onChange}>
+        onChange={handleVersionChange}>
         {Object.keys(versions).map(gameVersion => (
             <option key={`version-${gameVersion}`}
             value={versions[gameVersion]} className='text-center'>
