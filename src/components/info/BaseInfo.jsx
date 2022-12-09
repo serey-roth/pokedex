@@ -16,9 +16,20 @@ const getImgUrl = (icon) => {
 }
 
 const BaseInfo = ({ base, species }) => {
-    const { type } = usePokemonContext();
+    const { type, handleSelectionsChange } = usePokemonContext();
     
-    const handleClick = (name) => {
+    const handleAbilityClick = (ability) => {
+        handleSelectionsChange({
+            name: 'ability',
+            value: ability,
+        })
+    }
+
+    const handleVarietyClick = (variety) => {
+        handleSelectionsChange({
+            name: 'variety',
+            value: variety,
+        })
     }
 
     return (
@@ -58,7 +69,7 @@ const BaseInfo = ({ base, species }) => {
                     ${is_hidden ? 
                     'bg-opacity-50 font-thin' : 'bg-opacity-100 font-semibold'}
                     text-white`}
-                    onClick={() => handleClick(ability.name)}>
+                    onClick={() => handleAbilityClick(ability.name)}>
                         {ability.name.replace(/\-/g, ' ')}
                     </p>
                 ))}
@@ -100,8 +111,8 @@ const BaseInfo = ({ base, species }) => {
                     className={`capitalize font-semibold text-center
                     rounded-md py-1 px-2 text-white cursor-pointer
                     ${type && types[type].backgroundColor}`}
-                    onClick={() => dispatch(setVariety(variety?.pokemon?.name, 
-                    variety?.is_default))}>
+                    onClick={() => handleVarietyClick(variety?.pokemon?.name, 
+                    variety?.is_default)}>
                         {name.replace(/\-/g, ' ')
                         .replace(/gmax/g, 'gigantamax')}
                     </p>
