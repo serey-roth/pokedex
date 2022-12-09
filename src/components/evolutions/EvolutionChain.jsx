@@ -6,10 +6,6 @@ import Evolution from './Evolution';
 import { useEvolutions } from '../../features/hooks';
 import { usePokemonContext } from '../../features/pokemonContext';
 
-const Loading = <div className='bg-slate-400 animate-pulse w-full h-[300px]'></div>
-
-const Error = <div className='bg-rose-400 animate-pulse w-full h-[300px]'></div>
-
 const EvolutionChain = ({ species }) => {
     const { type } = usePokemonContext();
     const { 
@@ -20,9 +16,6 @@ const EvolutionChain = ({ species }) => {
         error
     } = useEvolutions(species.evolution_chain?.url?.match(/\/(\d+)\//g)[0]
     .replace(/\//g, ''));
-
-    if (isLoading || isFetching) return Loading;
-    if (isError && error) return Error;
 
     const chain = getEvolutionChain(evolutions);
 
@@ -41,7 +34,9 @@ const EvolutionChain = ({ species }) => {
             rounded-lg p-2 ${type && `${types[type].backgroundColor} text-white`}`}>
                 Evolution Chain
             </h1> 
-            {chain?.length === 1 ? (
+            {(isLoading || isFetching) ? (<p>Loading...</p>)
+            : (isError && error) ? (<p>Error occured when fetching data!</p>)
+            : chain?.length === 1 ? (
                 <p className='w-full text-center
                 font-semibold text-lg'>This pokemon does not evolve.</p>
             ) : (
