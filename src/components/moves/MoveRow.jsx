@@ -34,7 +34,7 @@ const ErrorRow = (<tr className='animate-pulse bg-rose-300 w-full h-[40px]'>
 </tr>)
 
 const MoveRow = ({ level, name }) => {
-    const { type } = usePokemonContext();
+    const { type, handleSelectionsChange } = usePokemonContext();
     const { 
         data, 
         isFetching, 
@@ -43,7 +43,11 @@ const MoveRow = ({ level, name }) => {
         isLoading
     } = useMove(name)
 
-    const handleClick = () => {
+    const handleMoveClick = () => {
+        handleSelectionsChange({
+            name: 'move',
+            value: name,
+        })
     }
 
     if (isLoading || isFetching) return LoadingRow;
@@ -52,7 +56,7 @@ const MoveRow = ({ level, name }) => {
     return (
         <tr className={`${type && types[type].hoverColor} hover:text-white
         transition-colors cursor-pointer`} 
-        onClick={handleClick}>
+        onClick={handleMoveClick}>
             <td>{level || '-'}</td>
             <td className='capitalize'>{data ? name.replace(/\-/g, ' ') : '-'}</td>
             <td className='capitalize flex item-center justify-center'>
