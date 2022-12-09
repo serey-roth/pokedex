@@ -61,7 +61,7 @@ const Pokedex = () => {
     if (isError && error) return (<Error />);
 
     return (
-        <div className='w-full flex flex-col gap-2 relative min-h-screen'>
+        <div className='w-full grid gap-2 relative min-h-screen'>
             <div className='w-full flex flex-wrap items-center px-3 py-1
             bg-black text-white'>
                 <h1 className='animate-slideleft font-bold uppercase text-2xl
@@ -74,13 +74,13 @@ const Pokedex = () => {
                     onChange={handleSearchChange} />
             </div>
             
-            <span className='self-end mx-2'>
+            <span className='justify-self-end mx-2'>
             <PokedexRegions 
                     region={region} 
                     onChange={handleRegionChange} />
             </span>
 
-            <div className='flex flex-wrap w-full mx-2'>
+            <div className='grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-10 mx-2'>
                 {visibleData.map(entry => (
                     <PokemonCard query={entry.entry_number} />
                 ))}

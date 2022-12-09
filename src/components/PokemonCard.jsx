@@ -5,13 +5,9 @@ import { ImSpinner } from 'react-icons/im'
 import { types } from '../assets';
 import PokemonPlaceHolder from './PokemonPlaceHolder';
 import PokemonType from './PokemonType';
-import ImagePlaceHolder from './ImagePlaceHolder';
 
 import { usePokemon } from '../features/hooks';
 import LoadedImage from './LoadedImage';
-
-//for lazy loading image
-const PokemonImage = React.lazy(() => import('./PokemonImage'))
 
 const PokemonCard = ({ query }) => {
     const navigate = useNavigate();
@@ -47,35 +43,29 @@ const PokemonCard = ({ query }) => {
     if (!data?.is_default) return null;
 
     return (
-        <div className={`flex flex-col justify-center sm:w-fit w-full
-        h-fit p-2 border-2 relative backdrop-blur-sm
-        `}>
-            <h3 className={`font-[900] text-[2em] italic 
-            ${data && types[data.types[0].type.name].textColor}
-            absolute top-1`}>
-                {data?.id}
-            </h3>
+        <div className='flex flex-col h-fit p-2 border-[0.5px] relative'>
+            <span className='self-center'>
+                <LoadedImage 
+                    width={80} 
+                    height={80} 
+                    name={data?.name}
+                    src={data?.sprites?.other['official-artwork'].front_default} />
+            </span>
 
-            <LoadedImage 
-                width={100} 
-                height={100} 
-                name={data?.name}
-                src={data?.sprites?.other['official-artwork'].front_default} />
-    
-            <h1 className={`text-center flex-1 capitalize font-bold text-xl
-            cursor-pointer hover:text-black transition-colors
-            ${data && types[data.types[0].type.name].textColor}`}
-            onClick={() => handleClick(data?.name)}>
-                {data?.name?.replace(/\-[a-z]{3,}$/g, '')}
-            </h1>
-            <div className='flex flex-col items-center gap-1 absolute
-            top-2 right-2'>
-            {data?.types.map((typeObj) => (
-                <PokemonType key={typeObj.type.name}
-                size='w-[40px] h-[40px]'
-                type={typeObj.type.name} />
-            ))}
-            </div> 
+            <span className='flex flex-wrap items-center gap-1'>
+                <h3 className={`font-[700] text-sm
+                ${data && types[data.types[0].type.name].textColor}`}>
+                    {data?.id}
+                </h3>
+                <h1 
+                    className={`flex-1 capitalize text-sm truncate
+                    cursor-pointer text-right ${data && 
+                    types[data.types[0].type.name].textColor}`}
+                    onClick={() => handleClick(data?.name)}
+                >
+                    {data?.name?.replace(/\-[a-z]{3,}$/g, '')}
+                </h1>
+            </span>
         </div>
     )
 }
