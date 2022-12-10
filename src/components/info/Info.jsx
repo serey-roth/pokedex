@@ -7,6 +7,7 @@ import { types } from '../../assets'
 import BaseInfo from './BaseInfo'
 import Breeding from './Breeding'
 import Training from './Training'
+import Typing from '../Typing'
 
 const Info = ({ base, species }) => {
     const { type } = usePokemonContext();
@@ -19,12 +20,12 @@ const Info = ({ base, species }) => {
             ${type && `${types[type].backgroundColor} text-white`}`}>
                 Pokemon Data
             </h1> 
-            <div className='flex flex-col lg:grid grid-cols-3
-            items-center lg:items-start lg:w-[80%]
-            w-full py-5 gap-7'>
-            <BaseInfo base={base} species={species} />
-            <Training base={base} species={species}/>
-            <Breeding species={species}/>
+            <div className='flex flex-col md:grid grid-cols-2 lg:grid-cols-4
+            items-center md:items-start w-full py-5 gap-7 place-items-center'>
+                <BaseInfo base={base} species={species} />
+                <Training base={base} species={species}/>
+                <Breeding species={species}/>
+                <Typing pokemonTypes={base?.types}/>
             </div>
         </div>
     )
