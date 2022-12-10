@@ -21,7 +21,7 @@ const Info = ({ base, species }) => {
                 Pokemon Data
             </h1> 
             <div className='flex flex-col md:grid grid-cols-2 lg:grid-cols-4
-            items-center md:items-start w-full py-5 gap-7 place-items-center'>
+            items-center md:items-start w-full md:w-[95%] py-5 gap-7 place-items-center'>
                 <BaseInfo base={base} species={species} />
                 <Training base={base} species={species}/>
                 <Breeding species={species}/>
