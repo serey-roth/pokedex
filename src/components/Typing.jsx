@@ -6,6 +6,8 @@ import { types } from '../assets';
 
 import { useType } from '../features/hooks';
 
+const Error = <div className='bg-rose-300 animate-pulse w-full sm:w-[200px] h-[300px] rounded-lg'></div>
+
 const Relation = ({mainType, effect, relation}) => (
     <div className='flex flex-col gap-1'>
         <p className='w-full font-semibold text-md
@@ -22,13 +24,18 @@ const Relation = ({mainType, effect, relation}) => (
 )
 
 const DamageRelations = ({ type }) => {
-    const { data } = useType(type);
+    const { data, isFetching, isLoading, isError, error } = useType(type);
+
+    const Loading = <div className={`${type && types[type].backgroundColor} 
+    animate-pulse w-[80%] sm:w-[300px] h-[300px] rounded-lg`}></div>
 
     return (
         <>
-        {data?.damage_relations && (
+        {(isLoading || isFetching) ? Loading
+        : (isError && error) ? Error 
+        : data?.damage_relations && (
             <div className='flex flex-col border border-slate-400/50
-            rounded-lg px-3 py-2 lg:max-w-[300px] max-w-full'>
+            rounded-lg px-3 py-2 md:w-[250px] max-w-full'>
                 <p className={`font-bold text-md capitalize
                 w-full text-center ${type && types[type].backgroundColor}
                 text-white rounded-lg p-2 backdrop-blur-sm`}>{type}</p>
@@ -60,7 +67,8 @@ const Typing = ({ pokemonTypes }) => {
             <p className='max-w-full flex flex-wrap text-center'>
                 *effectiveness of types on this pokemon based on types
                 </p>
-            <div className='flex lg:flex-row flex-col gap-3 flex-wrap'>  
+            <div className={`grid ${pokemonTypes && pokemonTypes.length > 1 
+            && 'grid-cols-2'} gap-2`}>  
             {pokemonTypes?.map(typeObj => (
                 <DamageRelations key={typeObj.type?.name} 
                 type={typeObj.type?.name} />
