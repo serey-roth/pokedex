@@ -13,10 +13,10 @@ export const PokemonContextProvider = ({ children }) => {
 
     const handleTypeChange = (type) => setType(type);
     
-    const handleSelectionsChange = (payload) => {
+    const handleSelectionsChange = (updatedSelections) => {
         setSelections(prevSelections => ({
             ...prevSelections,
-            [payload.name]: payload.value,
+            ...updatedSelections
         }))
     }
 
