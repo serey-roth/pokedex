@@ -83,6 +83,12 @@ const Pokemon = () => {
         }
     }, [base])
 
+    //if a modal opens, hide the overflow the underlying page
+    useEffect(() => {
+        if (selections.move || selections.ability) document.body.style.overflow = 'hidden';
+        else document.body.style.overflow = 'unset';
+    }, [selections.move, selections.ability])
+    
     const handleReturn = () => {
         navigate('/');
     }
