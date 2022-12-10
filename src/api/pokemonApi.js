@@ -53,8 +53,8 @@ export const pokemonApi = {
     getPokemonsList(page) {
         return makeQuery(`pokemon/?limit=20&offset=${page}`);
     },
-    getPokemon(pokemonId) {
-        return makeQuery(`pokemon/${pokemonId}`);
+    getPokemon(query) {
+        return makeQuery(`pokemon/${query}`);
     },
     getEvolutions(speciesId) {
         return makeQuery(`evolution-chain/${speciesId}`);
