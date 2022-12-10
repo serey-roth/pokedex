@@ -44,10 +44,7 @@ const MoveRow = ({ level, name }) => {
     } = useMove(name)
 
     const handleMoveClick = () => {
-        handleSelectionsChange({
-            name: 'move',
-            value: name,
-        })
+        handleSelectionsChange({ move: name })
     }
 
     if (isLoading || isFetching) return LoadingRow;

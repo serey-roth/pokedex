@@ -19,17 +19,11 @@ const BaseInfo = ({ base, species }) => {
     const { type, handleSelectionsChange } = usePokemonContext();
     
     const handleAbilityClick = (ability) => {
-        handleSelectionsChange({
-            name: 'ability',
-            value: ability,
-        })
+        handleSelectionsChange({ ability })
     }
 
     const handleVarietyClick = (variety) => {
-        handleSelectionsChange({
-            name: 'variety',
-            value: variety,
-        })
+        handleSelectionsChange({ variety })
     }
 
     return (
