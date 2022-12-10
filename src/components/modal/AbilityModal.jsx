@@ -30,10 +30,7 @@ const AbilityModal = () => {
         entry?.version_group?.name === selections.version);
 
     const handleClose = () => {
-        handleSelectionsChange({
-            name: 'ability',
-            value: '',
-        })
+        handleSelectionsChange({ ability: '' });
     }
 
     useEffect(() => {

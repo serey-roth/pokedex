@@ -26,10 +26,7 @@ const MoveModal = () => {
         entry?.version_group?.name === selections.version);
 
     const handleClose = () => {
-        handleSelectionsChange({
-            name: 'move',
-            value: '',
-        })
+        handleSelectionsChange({ move: '' })
     }
 
     //when the user hits the escape key, we want to close the modal
