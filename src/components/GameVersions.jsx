@@ -1,7 +1,9 @@
 import React from 'react'
 
 import { types } from '../assets';
+
 import { usePokemonContext } from '../features/pokemonContext';
+
 const versions = {
     'red/blue': 'red-blue',
     'yellow': 'yellow' ,
@@ -24,18 +26,15 @@ const versions = {
 }
 
 const GameVersions = () => {
-    const { selections, handleSelectionsChange } = usePokemonContext();
+    const { type, selections, handleSelectionsChange } = usePokemonContext();
     
     const handleVersionChange = (e) => {
-        handleSelectionsChange({
-            name: 'version',
-            value: e.target.value,
-        });
+        handleSelectionsChange({ version: e.target.value });
     }
 
     return (
-        <select className={`rounded-lg p-2 uppercase bg-white bg-opacity-80
-        font-bold outline-none border-2`}
+        <select className={`rounded-lg p-2 uppercase bg-opacity-80 w-1/2 sm:w-auto
+        font-bold outline-none border-2 ${type && `${types[type].backgroundColor} text-white`}`}
         value={selections.version}
         onChange={handleVersionChange}>
         {Object.keys(versions).map(gameVersion => (
