@@ -25,7 +25,7 @@ const BaseInfo = ({ base, species }) => {
     }
 
     return (
-        <div className='flex flex-col flex-wrap gap-2'>
+        <div className='flex flex-col flex-wrap items-center gap-2'>
             <h2 className='font-semibold text-lg w-full text-center'>
             Base Information
             </h2>
@@ -85,10 +85,10 @@ const BaseInfo = ({ base, species }) => {
                 ))}
                 </span>
             </div>
-            <div className='flex gap-2 items-center'>
+            <div className='flex flex-col gap-2 items-center'>
                 <p className='text-center font-semibold text-black
                 w-[70px]'>Forms</p>
-                <span className='flex flex-wrap gap-2 flex-1'>
+                <span className='flex justify-center flex-wrap gap-2 flex-1'>
                 {species && species.varieties?.map(variety => {
                     let name;
                     if (variety.isDefault) {

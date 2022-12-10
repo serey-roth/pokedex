@@ -3,7 +3,7 @@ import { BsGenderFemale, BsGenderMale } from 'react-icons/bs'
 
 const Breeding = ({ species }) => {
     return (
-        <div className='flex flex-col flex-wrap gap-2'>
+        <div className='flex flex-col flex-wrap items-center gap-2'>
             <h2 className='font-semibold text-lg w-full text-center'>Breeding</h2>
             <span className='flex gap-2 items-center'>
                 <p className='text-center font-semibold text-black

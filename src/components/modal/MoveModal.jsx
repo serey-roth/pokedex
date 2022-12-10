@@ -42,8 +42,8 @@ const MoveModal = () => {
 
     return (
         <ModalPortal wrapperId='modal-portal'>
-            <div className='fixed lg:inset-x-1/4 lg:inset-y-[10%] z-50 
-            inset-[2%] overflow-auto  transition-all ease-in-out flex 
+            <div className='fixed inset-[2%] sm:inset-[20%]
+            overflow-auto  transition-all ease-in-out flex 
             backdrop-blur-sm mix-blend-luminosity animate-slideup
             border border-slate-500/40 rounded-lg bg-white
             flex-col items-center gap-3 p-5'>

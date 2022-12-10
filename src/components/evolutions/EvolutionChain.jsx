@@ -29,7 +29,7 @@ const EvolutionChain = ({ species }) => {
     ))
 
     return (
-        <div className='flex flex-col w-full lg:items-center py-5 gap-5'>
+        <div className='flex flex-col w-full lg:items-center gap-5'>
             <h1 className={`font-bold text-xl uppercase w-fit self-center
             rounded-lg p-2 ${type && `${types[type].backgroundColor} text-white`}`}>
                 Evolution Chain

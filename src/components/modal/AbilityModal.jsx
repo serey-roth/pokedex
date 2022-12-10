@@ -43,8 +43,7 @@ const AbilityModal = () => {
 
     return (
         <ModalPortal wrapperId='modal-portal'>
-            <div className='fixed lg:inset-x-1/4 lg:inset-y-[10%]
-            inset-[2%] overflow-auto z-50 backdrop-blur-sm
+            <div className='fixed inset-[2%] sm:inset-[20%] overflow-auto z-50 backdrop-blur-sm
             mix-blend-luminosity flex animate-slideup
             border border-slate-500/40 rounded-lg bg-white
             flex-col items-center gap-3 p-5'>
