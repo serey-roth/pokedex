@@ -8,7 +8,7 @@ import PokedexRegions from '../components/PokedexRegions';
 
 import { usePokedex } from '../features/hooks'
 
-const ITEMS_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 100;
 
 const Pokedex = () => {
     const [page, setPage] = useState(1);
