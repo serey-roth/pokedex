@@ -88,9 +88,11 @@ const getEvolutionChain = (data) => {
     }
     //separate the chain based on evolution stage
     const stages = [];
-    stages.push([evolutions[0]], 
-        evolutions.slice(1, evolutions[0].children + 1),
+    stages.push([evolutions[0]]);
+    if (evolutions.length > 1) {
+        stages.push(evolutions.slice(1, evolutions[0].children + 1),
         evolutions.slice(evolutions[0].children + 1));
+    }
     return stages;
 }
 
