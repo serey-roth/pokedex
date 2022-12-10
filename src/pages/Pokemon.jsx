@@ -38,6 +38,7 @@ const Pokemon = () => {
     const { 
         selections,
         handleTypeChange,
+        handleSelectionsChange,
     } = usePokemonContext();
 
     const pokemonRef = useRef();
@@ -60,8 +61,10 @@ const Pokemon = () => {
 
     useEffect(() => {
         const handleClick = () => {
-            setAbilityModal(false);
-            setMoveModal(false);
+            handleSelectionsChange({
+                ability: '',
+                move: '',
+            })
         }
         //when the user clicks on the pokemon page, closes all the modals
         if (pokemonRef.current) {
