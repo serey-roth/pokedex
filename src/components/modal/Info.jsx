@@ -9,8 +9,7 @@ const Info = ({description, effect, shortEffect}) => {
     const textArray = effect?.split('\n\n');
 
     return (
-        <div className='w-full flex flex-col items-center
-        justify-center flex-1 gap-2'>
+        <div className='w-full flex flex-col items-center flex-1 gap-2'>
             <p className={`uppercase py-1 px-2 rounded-lg
             ${type && types[type].backgroundColor} text-white`}>
                 Flavor Text
@@ -22,16 +21,16 @@ const Info = ({description, effect, shortEffect}) => {
             <p className={`uppercase py-1 px-2 rounded-lg
             ${type && types[type].backgroundColor} text-white`}>In-depth Effect</p>
             <p className='text-center
-            w-full'>{textArray?.map(item => (
-                <>
+            w-full'>{textArray?.map((item, index) => (
+                <React.Fragment key={index}>
                     {item?.split('\n')?.map(i => (
-                        <>
+                        <React.Fragment key={index}>
                             {i}
                             <br />
-                        </>
+                        </React.Fragment>
                     ))} 
                     <br />
-                </>
+                </React.Fragment>
             ))}</p>
         </div>
     )
