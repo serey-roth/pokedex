@@ -16,7 +16,6 @@ import { usePokemonContext } from '../features/pokemonContext'
 import Stats from '../components/stats/Stats'
 import MovePool from '../components/moves/MovePool'
 import EvolutionChain from '../components/evolutions/EvolutionChain'
-import Typing from '../components/Typing'
 import AbilityModal from '../components/modal/AbilityModal'
 import MoveModal from '../components/modal/MoveModal'
 
@@ -49,7 +48,7 @@ const Pokemon = () => {
         isFetching: isFetchingBase,
         isError: isErrorBase, 
         error: errorBase
-    } = usePokemon(id);
+    } = usePokemon(selections.variety ? selections.variety : id);
 
     const { 
         data: species,
@@ -72,7 +71,7 @@ const Pokemon = () => {
         }
         return () => {
             if (pokemonRef.current) {
-                pokemonRef.current.removeEventListener('click');
+                pokemonRef.current.removeEventListener('click', handleClick);
             }                                                                                                                                                     
         }
     }, []);
@@ -121,10 +120,9 @@ const Pokemon = () => {
 
                 <div className='flex flex-col items-center w-full justify-center gap-1'>
                     <span className={`flex flex-col items-center
-                    font-bold text-2xl uppercase`}>
+                    font-bold text-2xl uppercase w-2/3 sm:w-[300px]`}>
                         <LoadedImage 
-                        src={image}
-                        width='100%' />
+                        src={image} />
                         <p>{species?.name}</p>
                     </span>
                     <p className='font-semibold text-lg cursor-pointer rounded-lg p-2'>
@@ -149,7 +147,6 @@ const Pokemon = () => {
                 <div className='flex flex-col items-center
                 w-full px-5'>
                     <Info base={base} species={species} />
-                    <Typing pokemonTypes={base?.types}/>
                     <Stats base={base}/>
                     <EvolutionChain species={species}/>
                     <MovePool 
