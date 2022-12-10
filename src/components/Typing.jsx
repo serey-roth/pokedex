@@ -3,7 +3,7 @@ import React from 'react'
 import PokemonType from './PokemonType'
 
 import { types } from '../assets';
-import { usePokemonContext } from '../features/pokemonContext';
+
 import { useType } from '../features/hooks';
 
 const Relation = ({mainType, effect, relation}) => (

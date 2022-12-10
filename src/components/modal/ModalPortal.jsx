@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react'
+import { useState, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
 
 //a wrapper portal that allows the element inside to appear

@@ -2,8 +2,6 @@ import React from 'react'
 
 import { types } from '../../assets';
 
-import { setVariety, setSelectAbility } from '../../redux/features/pokemonSlice';
-import { setAbilityModal } from '../../redux/features/uiSlice';
 import { usePokemonContext } from '../../features/pokemonContext';
 
 const convertToFootInch = (heightMeter) => {

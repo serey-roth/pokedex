@@ -2,9 +2,6 @@ import React from 'react'
 
 import { types } from '../../assets';
 
-import { setSelectMove } from '../../redux/features/pokemonSlice';
-import { setMoveModal } from '../../redux/features/uiSlice';
-
 import PokemonType from '../PokemonType';
 import { useMove } from '../../features/hooks';
 import { usePokemonContext } from '../../features/pokemonContext';
